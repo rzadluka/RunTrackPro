@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class StatsFragment extends Fragment {
+public class PlanByMilesFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -16,10 +16,10 @@ public class StatsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public StatsFragment() {}
+    public PlanByMilesFragment() {}
 
-    public static StatsFragment newInstance(String param1, String param2) {
-        StatsFragment fragment = new StatsFragment();
+    public static PlanByMilesFragment newInstance(String param1, String param2) {
+        PlanByMilesFragment fragment = new PlanByMilesFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -40,6 +40,6 @@ public class StatsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_stats, container, false);
+        return inflater.inflate(R.layout.fragment_plan_by_miles, container, false);
     }
 }

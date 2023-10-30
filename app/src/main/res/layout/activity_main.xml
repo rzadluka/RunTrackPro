@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/fragmentContainerView3"
+            android:id="@+id/fragmentMainContainerView"
             android:name="com.cs407.runtrackpro.HomeFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
