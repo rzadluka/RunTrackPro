@@ -10,9 +10,9 @@ import android.widget.Button;
 public class MainActivity extends AppCompatActivity {
 
     FragmentManager fragmentManager;
-    Button HomeFragmentButton;
-    Button RunFragmentButton;
-    Button StatsFragmentButton;
+    Button homeFragmentButton;
+    Button runFragmentButton;
+    Button statsFragmentButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,8 +21,8 @@ public class MainActivity extends AppCompatActivity {
 
         fragmentManager = getSupportFragmentManager();
 
-        HomeFragmentButton = findViewById(R.id.home_button);
-        HomeFragmentButton.setOnClickListener(new View.OnClickListener() {
+        homeFragmentButton = findViewById(R.id.home_button);
+        homeFragmentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 fragmentManager.beginTransaction()
@@ -33,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        RunFragmentButton = findViewById(R.id.plan_button);
-        RunFragmentButton.setOnClickListener(new View.OnClickListener() {
+        runFragmentButton = findViewById(R.id.plan_button);
+        runFragmentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 fragmentManager.beginTransaction()
@@ -45,8 +45,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        StatsFragmentButton = findViewById(R.id.stat_button);
-        StatsFragmentButton.setOnClickListener(new View.OnClickListener() {
+        statsFragmentButton = findViewById(R.id.stat_button);
+        statsFragmentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 fragmentManager.beginTransaction()

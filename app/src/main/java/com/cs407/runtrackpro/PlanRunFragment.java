@@ -98,7 +98,7 @@ public class PlanRunFragment extends Fragment {
         });
     }
 
-    public void goToDuringRun() {
+    private void goToDuringRun() {
         Intent intent = new Intent(getContext(), DuringRunActivity.class);
         startActivity(intent);
     }

@@ -2,6 +2,7 @@ package com.cs407.runtrackpro;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -16,6 +17,7 @@ public class DuringRunActivity extends AppCompatActivity {
     int totalMinutes = 0;
     int totalSeconds = 0;
     Handler timerHandler = new Handler();
+
     Runnable timerRunnable = new Runnable() {
         @Override
         public void run() {
@@ -29,6 +31,7 @@ public class DuringRunActivity extends AppCompatActivity {
             timerHandler.postDelayed(this, 500);
         }
     };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +57,20 @@ public class DuringRunActivity extends AppCompatActivity {
             }
         });
 
+        Button endRun = findViewById(R.id.endRun);
+        endRun.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // save data and run information
+                String runTime = timer.getText().toString();
+                goToRunComplete(runTime);
+            }
+        });
     }
 
+    private void goToRunComplete(String runTime) {
+        Intent intent = new Intent(this, RunCompleteActivity.class);
+        intent.putExtra("runTime", runTime);
+        startActivity(intent);
+    }
 }
