@@ -2,12 +2,21 @@ package com.cs407.runtrackpro;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class DuringRunActivity extends AppCompatActivity {
 
@@ -63,6 +72,19 @@ public class DuringRunActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // save data and run information
                 String runTime = timer.getText().toString();
+
+                // TODO placeholders for distance and speed
+                String distance = "0.0";
+                String speed = "0.0";
+
+                SQLiteDatabase sqLiteDatabase = getApplicationContext().openOrCreateDatabase("stats",
+                        Context.MODE_PRIVATE, null);
+                DBHelper dbHelper = new DBHelper(sqLiteDatabase);
+
+                DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
+                String date = dateFormat.format(new Date());
+                dbHelper.saveStats(date, runTime, distance, speed);
+
                 goToRunComplete(runTime);
             }
         });
