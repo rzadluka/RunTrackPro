@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class StatsDetailsActivity extends AppCompatActivity {
 
@@ -16,6 +17,7 @@ public class StatsDetailsActivity extends AppCompatActivity {
     TextView distance;
     TextView time;
     TextView speed;
+    String date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,7 @@ public class StatsDetailsActivity extends AppCompatActivity {
         if (statId != -1) {
             Stats stats = HomeFragment.stats1.get(statId);
             statsDetails.setText("Your run on " + stats.getDate());
+            date = stats.getDate();
             distance.setText(stats.getDistance());
             time.setText(stats.getTime());
             speed.setText(stats.getSpeed());
@@ -49,15 +52,17 @@ public class StatsDetailsActivity extends AppCompatActivity {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SQLiteDatabase sqLiteDatabase = getApplicationContext().openOrCreateDatabase("stats",
-                        Context.MODE_PRIVATE, null);
-                DBHelper dbHelper = new DBHelper(sqLiteDatabase);
+                if (statId == -1) {
+                    Toast.makeText(StatsDetailsActivity.this, "Cannot delete stat that doesn't exist", Toast.LENGTH_SHORT).show();
+                } else {
+                    SQLiteDatabase sqLiteDatabase = getApplicationContext().openOrCreateDatabase("stats",
+                            Context.MODE_PRIVATE, null);
+                    DBHelper dbHelper = new DBHelper(sqLiteDatabase);
+                    dbHelper.deleteStats(date);
 
-                String date = getIntent().getExtras().getString("date");
-                dbHelper.deleteStats(date);
-
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                }
             }
         });
     }
