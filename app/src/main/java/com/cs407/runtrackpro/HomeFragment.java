@@ -76,7 +76,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 int statId = position;
-                Intent intent = new Intent(getContext(), StatsFragment.class);
+                Intent intent = new Intent(getContext(), StatsDetailsActivity.class);
                 intent.putExtra("statId", statId);
                 startActivity(intent);
             }

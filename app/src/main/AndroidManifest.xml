@@ -17,6 +17,9 @@
         android:theme="@style/Theme.RunTrackPro"
         tools:targetApi="31">
         <activity
+            android:name=".StatsDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".RunCompleteActivity"
             android:exported="false" />
         <activity
