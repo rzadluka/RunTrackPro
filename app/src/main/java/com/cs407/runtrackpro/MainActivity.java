@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 fragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainerView3, HomeFragment.class,null)
+                        .replace(R.id.fragmentMainContainerView, HomeFragment.class,null)
                         .setReorderingAllowed(true)
                         .addToBackStack("Showing Home")
                         .commit();
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 fragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainerView3,Fragment1.class,null)
+                        .replace(R.id.fragmentMainContainerView, Fragment1.class,null)
                         .setReorderingAllowed(true)
                         .addToBackStack("Showing Fragment1")
                         .commit();
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 fragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainerView3,StatsFragment.class,null)
+                        .replace(R.id.fragmentMainContainerView,StatsFragment.class,null)
                         .setReorderingAllowed(true)
                         .addToBackStack("Showing Fragment1")
                         .commit();

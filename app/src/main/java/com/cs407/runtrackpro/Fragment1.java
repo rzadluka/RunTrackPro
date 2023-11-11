@@ -63,13 +63,13 @@ public class Fragment1 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_1, container, false);
+        return inflater.inflate(R.layout.fragment_plan_run, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view,@NonNull Bundle savedInstanceState){
         Button milesButton =view.findViewById(R.id.Miles);
-        TextView textView =view.findViewById(R.id.MapPlaceHolder);
+        TextView textView =view.findViewById(R.id.HeaderText);
         milesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
