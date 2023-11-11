@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 fragmentManager.beginTransaction()
-                        .replace(R.id.fragmentMainContainerView, Fragment1.class,null)
+                        .replace(R.id.fragmentMainContainerView, PlanRunFragment.class,null)
                         .setReorderingAllowed(true)
                         .addToBackStack("Showing Fragment1")
                         .commit();
