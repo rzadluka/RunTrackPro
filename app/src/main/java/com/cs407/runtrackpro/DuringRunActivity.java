@@ -2,6 +2,7 @@ package com.cs407.runtrackpro;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -15,6 +16,8 @@ public class DuringRunActivity extends AppCompatActivity {
     long startTime = 0;
     int totalMinutes = 0;
     int totalSeconds = 0;
+    double distance = 0;
+    double pace = 0;
     Handler timerHandler = new Handler();
     Runnable timerRunnable = new Runnable() {
         @Override
@@ -35,6 +38,7 @@ public class DuringRunActivity extends AppCompatActivity {
         setContentView(R.layout.activity_during_run);
 
         timer = (TextView) findViewById(R.id.timer);
+        Button endRunButton  = findViewById(R.id.endRun);
 
         Button controlTimer = findViewById(R.id.timerControl);
         controlTimer.setText("Start");
@@ -54,6 +58,21 @@ public class DuringRunActivity extends AppCompatActivity {
             }
         });
 
+        endRunButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                moveToEndRun();
+            }
+        });
+
+    }
+
+    public void moveToEndRun() {
+        Intent intent = new Intent(this, RunCompleteActivity.class);
+        intent.putExtra("time", String.format("%02d:%02d", totalMinutes, totalSeconds));
+        intent.putExtra("distance", "" + distance);
+        intent.putExtra("pace", "" + pace);
+        startActivity(intent);
     }
 
 }

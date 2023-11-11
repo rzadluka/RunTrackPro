@@ -12,6 +12,7 @@ public class RunCompleteActivity extends AppCompatActivity {
 
     Button homeButton;
     TextView timeText;
+    TextView distanceText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,7 +20,9 @@ public class RunCompleteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_run_complete);
 
         timeText = findViewById(R.id.time);
-        timeText.append(getIntent().getExtras().getString("runTime"));
+        distanceText = findViewById(R.id.distance);
+        timeText.append(getIntent().getExtras().getString("time"));
+        distanceText.append(getIntent().getExtras().getString("distance"));
 
         homeButton = findViewById(R.id.home_button);
         homeButton.setOnClickListener(new View.OnClickListener() {

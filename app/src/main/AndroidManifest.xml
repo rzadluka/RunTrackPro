@@ -16,7 +16,7 @@
             android:name=".DuringRunActivity"
             android:exported="false" />
         <activity
-            android:name=".statsActivity"
+            android:name=".StatsDetailsActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
@@ -27,6 +27,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".RunCompleteActivity"
+            android:exported="false"/>
     </application>
 
 </manifest>
