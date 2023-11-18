@@ -1,26 +1,59 @@
 package com.cs407.runtrackpro;
 
+import static android.content.ContentValues.TAG;
+
 import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.nfc.Tag;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.maps.DirectionsApi;
+import com.google.maps.DirectionsApiRequest;
+import com.google.maps.GeoApiContext;
+import com.google.maps.PendingResult;
+import com.google.maps.model.DirectionsResult;
+import com.google.maps.model.TravelMode;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.List;
 
 public class PlanByDestinationFragment extends Fragment {
 
@@ -41,6 +74,8 @@ public class PlanByDestinationFragment extends Fragment {
         return fragment;
     }
 
+    public  PlacesClient placesClient;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,13 +84,118 @@ public class PlanByDestinationFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_plan_by_destination, container, false);
+        //return inflater.inflate(R.layout.fragment_plan_by_destination, container, false);
+
+        String API_KEY ="AIzaSyBwGEk3QqFSCRWgm063zpbmFhEWzEx-I7Q";
+        Context appContext =getActivity().getApplicationContext();
+        Places.initialize(appContext, API_KEY);
+        placesClient =Places.createClient(appContext);
+        GeoApiContext context =new GeoApiContext.Builder()
+                .apiKey(API_KEY)
+                .build();
+
+        View view =inflater.inflate(R.layout.fragment_plan_by_destination,container,false);
+
+        EditText startText =(EditText) view.findViewById(R.id.destinationStartInput);
+        startText.setFocusable(false);
+        startText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<Place.Field> fieldList =Arrays.asList(Place.Field.ADDRESS
+                        ,Place.Field.LAT_LNG,Place.Field.NAME);
+                Intent intent =new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY,
+                        fieldList).build(appContext);
+                startAutocomplete.launch(intent);
+            }
+        });
+
+        EditText endText =(EditText) view.findViewById(R.id.destinationEndInput);
+        endText.setFocusable(false);
+        endText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<Place.Field> fieldList =Arrays.asList(Place.Field.ADDRESS
+                        ,Place.Field.LAT_LNG,Place.Field.NAME);
+                Intent intent =new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY,
+                        fieldList).build(appContext);
+                endAutocomplete.launch(intent);
+            }
+        });
+
+        Button generateRoute =(Button) view.findViewById(R.id.RouteButton);
+        generateRoute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String startLoc =startText.getText().toString();
+                String endLoc =endText.getText().toString();
+                if(startLoc !=null && endLoc !=null){
+                    showDistance(startLoc,endLoc,context);
+                }else{
+                    //make a toast.
+                }
+            }
+        });
+
+        return view;
     }
+
+    private final ActivityResultLauncher<Intent> startAutocomplete =registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(), result ->{
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent intent = result.getData();
+                    if (intent != null) {
+                        Place place = Autocomplete.getPlaceFromIntent(intent);
+                        EditText startText =getView().findViewById(R.id.destinationStartInput);
+                        startText.setText(place.getAddress());
+                    }
+                } else if (result.getResultCode() == Activity.RESULT_CANCELED) {
+                    // The user canceled the operation.
+                    Log.i(TAG, "User canceled autocomplete");
+                }
+            });
+
+    private final ActivityResultLauncher<Intent> endAutocomplete =registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(), result ->{
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent intent = result.getData();
+                    if (intent != null) {
+                        Place place = Autocomplete.getPlaceFromIntent(intent);
+                        EditText startText =getView().findViewById(R.id.destinationEndInput);
+                        startText.setText(place.getAddress());
+                    }
+                } else if (result.getResultCode() == Activity.RESULT_CANCELED) {
+                    // The user canceled the operation.
+                    Log.i(TAG, "User canceled autocomplete");
+                }
+            });
+
+    private void showDistance(String start, String end, GeoApiContext context){
+        DirectionsApiRequest directions = DirectionsApi.newRequest(context)
+                .origin(start)
+                .destination(end)
+                .mode(TravelMode.WALKING);
+
+        directions.setCallback(new PendingResult.Callback<DirectionsResult>() {
+            @Override
+            public void onResult(DirectionsResult result) {
+                if(result !=null && result.routes.length >0){
+                    long distanceInMeters = result.routes[0].legs[0].distance.inMeters;
+                    Log.i(TAG, "Distance: " + distanceInMeters + " meters");
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable e) {
+                Log.e(TAG, "Directions API request failed", e);
+            }
+        });
+    }
+
+
     private static final int PERMISSION_REQUEST_ACCESS_FINE_LOCATION = 12;
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;

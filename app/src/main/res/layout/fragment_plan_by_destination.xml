@@ -15,14 +15,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            android:hint="Enter starting destination: " />
+            android:hint="Start" />
 
         <EditText
             android:id="@+id/destinationEndInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:hint="Enter ending destination: " />
+            android:hint="Destination" />
+
+        <Button
+            android:id="@+id/RouteButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Generate Route" />
 
         <fragment
             xmlns:android="http://schemas.android.com/apk/res/android"
