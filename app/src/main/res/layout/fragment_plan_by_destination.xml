@@ -30,12 +30,17 @@
             android:layout_height="wrap_content"
             android:text="Generate Route" />
 
-        <fragment
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/framgent_map"
+        <Button
+            android:id="@+id/StartRun_Destination"
             android:layout_width="match_parent"
-            android:layout_height="350dp"
-            android:name="com.google.android.gms.maps.SupportMapFragment" />
+            android:layout_height="wrap_content"
+            android:text="Start Run" />
+
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/framgent_map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="350dp" />
 
     </LinearLayout>
 

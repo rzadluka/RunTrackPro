@@ -1,19 +1,29 @@
 package com.cs407.runtrackpro;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class PlanRunFragment extends Fragment {
+import com.google.android.gms.maps.GoogleMap;
+import com.google.maps.model.LatLng;
+
+import java.security.PublicKey;
+import java.util.List;
+
+public class PlanRunFragment extends Fragment{
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -88,18 +98,7 @@ public class PlanRunFragment extends Fragment {
                         .commit();
             }
         });
-
-        StartRunButton = view.findViewById(R.id.startRun);
-        StartRunButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goToDuringRun();
-            }
-        });
     }
 
-    private void goToDuringRun() {
-        Intent intent = new Intent(getContext(), DuringRunActivity.class);
-        startActivity(intent);
-    }
+
 }

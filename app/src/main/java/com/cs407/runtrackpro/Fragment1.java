@@ -86,19 +86,6 @@ public class Fragment1 extends Fragment {
                 textView.setText("DestinationPlaceHolder");
             }
         });
-
-        Button StartRunButton = view.findViewById(R.id.startRun);
-
-        StartRunButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToDuringRun();
-            }
-        });
     }
 
-    public void goToDuringRun() {
-        Intent intent = new Intent(getContext(), DuringRunActivity.class);
-        startActivity(intent);
-    }
 }

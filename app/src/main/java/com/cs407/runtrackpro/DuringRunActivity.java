@@ -1,15 +1,20 @@
 package com.cs407.runtrackpro;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class DuringRunActivity extends AppCompatActivity {
+import com.google.maps.model.LatLng;
+
+public class DuringRunActivity extends AppCompatActivity{
 
     //code for timer control made referencing from https://stackoverflow.com/questions/4597690/how-to-set-timer-in-android
     TextView timer;
@@ -65,6 +70,11 @@ public class DuringRunActivity extends AppCompatActivity {
             }
         });
 
+        Intent intent =getIntent();
+        String startLoc =intent.getStringExtra("start");
+        String endLoc =intent.getStringExtra("end");
+        Log.i(TAG,startLoc);
+        Log.i(TAG,endLoc);
     }
 
     public void moveToEndRun() {
@@ -74,5 +84,6 @@ public class DuringRunActivity extends AppCompatActivity {
         intent.putExtra("pace", "" + pace);
         startActivity(intent);
     }
+
 
 }

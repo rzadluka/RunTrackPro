@@ -23,6 +23,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -139,6 +140,7 @@ public class PlanByDestinationFragment extends Fragment {
             }
         });
 
+        //Route generate button and function.
         Button generateRoute =(Button) view.findViewById(R.id.RouteButton);
         generateRoute.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,8 +155,25 @@ public class PlanByDestinationFragment extends Fragment {
             }
         });
 
+        Button startRun =(Button) view.findViewById(R.id.StartRun_Destination);
+        startRun.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String startLoc =startText.getText().toString();
+                String endLoc =endText.getText().toString();
+                if(startLoc !=null && endLoc !=null){
+                    Intent intent =new Intent(getActivity(),DuringRunActivity.class);
+                    intent.putExtra("start",startLoc);
+                    intent.putExtra("end",endLoc);
+                    startActivity(intent);
+                }else{
+                    //make a toast.
+                }
+            }
+        });
         return view;
     }
+
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.framgent_map);
@@ -193,7 +212,7 @@ public class PlanByDestinationFragment extends Fragment {
                 }
             });
 
-    private Polyline currentPolyline;
+    //Show result, put marker and routes.
     private void showResult(String start, String end, GeoApiContext context){
         DirectionsApiRequest directions = DirectionsApi.newRequest(context)
                 .origin(start)
@@ -204,14 +223,15 @@ public class PlanByDestinationFragment extends Fragment {
             @Override
             public void onResult(DirectionsResult result) {
                 if(result !=null && result.routes.length >0){
-                    //long distanceInMeters = result.routes[0].legs[0].distance.inMeters;
-                    //Log.i(TAG, endLatLng.toString());
                     LatLng startLatLng = new LatLng(result.routes[0].legs[0].startLocation.lat,
                             result.routes[0].legs[0].startLocation.lng);
                     LatLng endLatLng = new LatLng(result.routes[0].legs[0].endLocation.lat,
                             result.routes[0].legs[0].endLocation.lng);
+                    //
                     adjustCamera(startLatLng,endLatLng);
                     drawRoute(result.routes[0].overviewPolyline.decodePath());
+                    //
+
                 }
             }
 
@@ -221,7 +241,9 @@ public class PlanByDestinationFragment extends Fragment {
             }
         });
     }
+    //
 
+    //Zoom the camera to adjust the view (small bug)
     private void adjustCamera(LatLng startLoc, LatLng endLoc){
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
@@ -248,6 +270,7 @@ public class PlanByDestinationFragment extends Fragment {
             }
         });
     }
+    //
 
     private void drawRoute(List<LatLng> path){
         new Handler(Looper.getMainLooper()).post(new Runnable() {
