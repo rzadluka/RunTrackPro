@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -70,12 +71,22 @@ public class DuringRunActivity extends AppCompatActivity{
             }
         });
 
+        //Change into map view
+        Button MapButton =findViewById(R.id.mapButton);
         Intent intent =getIntent();
         String startLoc =intent.getStringExtra("start");
         String endLoc =intent.getStringExtra("end");
-        Log.i(TAG,startLoc);
-        Log.i(TAG,endLoc);
+        MapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent =new Intent(DuringRunActivity.this,MapTrackActivity.class);
+                intent.putExtra("start",startLoc);
+                intent.putExtra("end",endLoc);
+                startActivity(intent);
+            }
+        });
     }
+
 
     public void moveToEndRun() {
         Intent intent = new Intent(this, RunCompleteActivity.class);
@@ -84,6 +95,7 @@ public class DuringRunActivity extends AppCompatActivity{
         intent.putExtra("pace", "" + pace);
         startActivity(intent);
     }
+
 
 
 }

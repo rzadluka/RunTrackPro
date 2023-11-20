@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -15,6 +16,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RunTrackPro"
         tools:targetApi="31">
+        <activity
+            android:name=".MapTrackActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MapDuringRunActivity"
+            android:exported="false" />
         <activity
             android:name=".DuringRunActivity"
             android:exported="false" />
@@ -32,11 +39,11 @@
         </activity>
         <activity
             android:name=".RunCompleteActivity"
-            android:exported="false"/>
+            android:exported="false" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBwGEk3QqFSCRWgm063zpbm
-            FhEWzEx-I7Q" />
+            android:value="AIzaSyBwGEk3QqFSCRWgm063zpbm             FhEWzEx-I7Q" />
     </application>
 
 </manifest>
