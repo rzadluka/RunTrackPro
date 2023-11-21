@@ -3,9 +3,14 @@ package com.cs407.runtrackpro;
 import static android.content.ContentValues.TAG;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -13,17 +18,28 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.maps.model.LatLng;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PolylineOptions;
+
+import java.text.DecimalFormat;
 
 public class DuringRunActivity extends AppCompatActivity{
 
     //code for timer control made referencing from https://stackoverflow.com/questions/4597690/how-to-set-timer-in-android
     TextView timer;
+    TextView distanceCovered;
+    TextView avgSpeed;
+    private static final int PERMISSION_REQUEST_ACCESS_FINE_LOCATION = 12;
+    private FusedLocationProviderClient mFusedLocationProviderClient;
+    private static final DecimalFormat format = new DecimalFormat("0.00");
     long startTime = 0;
     int totalMinutes = 0;
     int totalSeconds = 0;
     double distance = 0;
     double pace = 0;
+    Location lastKnownLocation = null;
     Handler timerHandler = new Handler();
     Runnable timerRunnable = new Runnable() {
         @Override
@@ -35,6 +51,32 @@ public class DuringRunActivity extends AppCompatActivity{
 
             timer.setText(String.format("%02d:%02d", totalMinutes, totalSeconds));
 
+            //Calculate distance traveled since last update
+            int permission = ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION);
+            if(permission == PackageManager.PERMISSION_DENIED) {
+                ActivityCompat.requestPermissions(getParent(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_ACCESS_FINE_LOCATION);
+            }
+            else {
+                mFusedLocationProviderClient.getLastLocation().addOnCompleteListener(DuringRunActivity.this, task -> {
+                    Location currentLocation = task.getResult();
+                    if(totalMinutes == 0 && totalSeconds == 0) {
+                        lastKnownLocation = task.getResult();
+                        distanceCovered.setText("0.00 mi");
+                        avgSpeed.setText("0.00 mph");
+                    }
+                    else if(totalSeconds % 15 == 0 && task.isSuccessful() && currentLocation != null && lastKnownLocation != null) {
+                        double distanceTraveled = lastKnownLocation.distanceTo(currentLocation);
+                        //meters to miles
+                        distanceTraveled = distanceTraveled/1609.34;
+                        distance += distanceTraveled;
+                        distanceCovered.setText("" + format.format(distance) + " mi");
+                        double speed = distance / ((totalMinutes * 60 + totalSeconds) / 3600.0);
+                        avgSpeed.setText("" + format.format(speed) + " mph");
+                        lastKnownLocation = currentLocation;
+                    }
+                });
+            }
+
             timerHandler.postDelayed(this, 500);
         }
     };
@@ -44,10 +86,15 @@ public class DuringRunActivity extends AppCompatActivity{
         setContentView(R.layout.activity_during_run);
 
         timer = (TextView) findViewById(R.id.timer);
+        distanceCovered = (TextView) findViewById(R.id.distance);
+        avgSpeed = (TextView) findViewById(R.id.speed);
         Button endRunButton  = findViewById(R.id.endRun);
+
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         Button controlTimer = findViewById(R.id.timerControl);
         controlTimer.setText("Start");
+
         controlTimer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,8 +138,8 @@ public class DuringRunActivity extends AppCompatActivity{
     public void moveToEndRun() {
         Intent intent = new Intent(this, RunCompleteActivity.class);
         intent.putExtra("time", String.format("%02d:%02d", totalMinutes, totalSeconds));
-        intent.putExtra("distance", "" + distance);
-        intent.putExtra("pace", "" + pace);
+        intent.putExtra("distance", "" + format.format(distance));
+        intent.putExtra("pace", "" + format.format(pace));
         startActivity(intent);
     }
 
