@@ -38,6 +38,8 @@ public class DuringRunActivity extends AppCompatActivity{
     long startTime = 0;
     int totalMinutes = 0;
     int totalSeconds = 0;
+
+    double plan_distance =0;
     double distance = 0;
     double pace = 0;
     Location lastKnownLocation = null;
@@ -133,17 +135,17 @@ public class DuringRunActivity extends AppCompatActivity{
             String distance_in_km =RAW_distance;
             Scanner sc =new Scanner(distance_in_km);
             double raw_double_distance_in_km =sc.nextDouble();
-            distance =raw_double_distance_in_km*0.621371;
+            plan_distance =raw_double_distance_in_km*0.621371;
         }
         if(plan.equals("m")){
             double double_distance =Double.parseDouble(RAW_distance);
-            distance =double_distance;
+            plan_distance =double_distance;
         }
         else{
             //make a toast.
         }
         //debug
-        String s=String.valueOf(distance);
+        String s=String.valueOf(plan_distance);
         Log.i(TAG,s);
         //-----------------------------------------------------------------------
         MapButton.setOnClickListener(new View.OnClickListener() {
