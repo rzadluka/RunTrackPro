@@ -128,7 +128,6 @@ public class DuringRunActivity extends AppCompatActivity{
         //identify which plan, if the plan is destination, change km to miles.
         //-----------------------------------------------------------------------
         String RAW_distance =intent.getStringExtra("distance");
-        double distance =0.0; //<------------Use this to do what you want.
         String plan =intent.getStringExtra("plan");
         if(plan.equals("d")){
             String distance_in_km =RAW_distance;
