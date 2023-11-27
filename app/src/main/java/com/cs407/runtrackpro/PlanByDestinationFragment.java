@@ -2,55 +2,35 @@ package com.cs407.runtrackpro;
 
 import static android.content.ContentValues.TAG;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.Location;
-import android.nfc.Tag;
 import android.os.Bundle;
-
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.google.android.gms.common.api.Status;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
-import com.google.android.libraries.places.widget.AutocompleteActivity;
-import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
-import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.maps.DirectionsApi;
 import com.google.maps.DirectionsApiRequest;
@@ -60,10 +40,17 @@ import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.LatLng;
 import com.google.maps.model.TravelMode;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class PlanByDestinationFragment extends Fragment {
 
@@ -87,6 +74,9 @@ public class PlanByDestinationFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
+    private ApiInterface apiInterface;
+
 
     public  PlacesClient placesClient;
 
@@ -113,6 +103,16 @@ public class PlanByDestinationFragment extends Fragment {
                 .build();
 
         View view =inflater.inflate(R.layout.fragment_plan_by_destination,container,false);
+
+        //
+        Retrofit retrofit =new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .baseUrl("https://maps.googleapis.com/")
+                .build();
+        apiInterface =retrofit.create(ApiInterface.class);
+        //
+
 
         EditText startText =(EditText) view.findViewById(R.id.destinationStartInput);
         startText.setFocusable(false);
@@ -162,10 +162,7 @@ public class PlanByDestinationFragment extends Fragment {
                 String startLoc =startText.getText().toString();
                 String endLoc =endText.getText().toString();
                 if(startLoc !=null && endLoc !=null){
-                    Intent intent =new Intent(getActivity(),DuringRunActivity.class);
-                    intent.putExtra("start",startLoc);
-                    intent.putExtra("end",endLoc);
-                    startActivity(intent);
+                    DistanceCal(startLoc,endLoc);
                 }else{
                     //make a toast.
                 }
@@ -242,6 +239,32 @@ public class PlanByDestinationFragment extends Fragment {
         });
     }
     //
+    String distance;
+    private void DistanceCal(String start, String end){
+        apiInterface.getDistance("AIzaSyBwGEk3QqFSCRWgm063zpbmFhEWzEx-I7Q",start,end)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<Result>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        //make a toast.
+                    }
+
+                    @Override
+                    public void onSuccess(Result result) {
+                        Intent intent =new Intent(getActivity(),DuringRunActivity.class);
+                        intent.putExtra("start",start);
+                        intent.putExtra("end",end);
+                        intent.putExtra("distance",""+result.getRows().get(0).getElements().get(0).getDistance().getText());
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        //make a toast.
+                    }
+                });
+    }
 
     //Zoom the camera to adjust the view (small bug)
     private void adjustCamera(LatLng startLoc, LatLng endLoc){
@@ -287,6 +310,7 @@ public class PlanByDestinationFragment extends Fragment {
                 mMap.addPolyline(polylineOptions);
             }
         });
+
     }
 
     /**

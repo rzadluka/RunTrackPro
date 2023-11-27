@@ -123,6 +123,8 @@ public class DuringRunActivity extends AppCompatActivity{
         Intent intent =getIntent();
         String startLoc =intent.getStringExtra("start");
         String endLoc =intent.getStringExtra("end");
+        String distance =intent.getStringExtra("distance");
+        Log.d(TAG," "+distance);
         MapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
