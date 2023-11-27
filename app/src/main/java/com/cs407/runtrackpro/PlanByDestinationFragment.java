@@ -53,40 +53,13 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class PlanByDestinationFragment extends Fragment {
-
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
-
-    private static final int PERMISSION_REQUEST_ACCESS_FINE_LOCATION = 12;
     private GoogleMap mMap;
-    private FusedLocationProviderClient mFusedLocationProviderClient;
-
-    public PlanByDestinationFragment() {}
-
-    public static PlanByDestinationFragment newInstance(String param1, String param2) {
-        PlanByDestinationFragment fragment = new PlanByDestinationFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     private ApiInterface apiInterface;
-
-
     public  PlacesClient placesClient;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -255,6 +228,7 @@ public class PlanByDestinationFragment extends Fragment {
                         Intent intent =new Intent(getActivity(),DuringRunActivity.class);
                         intent.putExtra("start",start);
                         intent.putExtra("end",end);
+                        intent.putExtra("plan","d");
                         intent.putExtra("distance",""+result.getRows().get(0).getElements().get(0).getDistance().getText());
                         startActivity(intent);
                     }
@@ -312,38 +286,4 @@ public class PlanByDestinationFragment extends Fragment {
         });
 
     }
-
-    /**
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.framgent_map);
-        mapFragment.getMapAsync(googleMap -> {
-            mMap = googleMap;
-            displayMyLocation();
-        });
-    }
-
-    private void displayMyLocation() {
-        int permission = ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION);
-        if(permission == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_ACCESS_FINE_LOCATION);
-        }
-        else {
-            mFusedLocationProviderClient.getLastLocation().addOnCompleteListener(this.getActivity(), task -> {
-                Location mLastKnownLocation = task.getResult();
-                mMap.addMarker(new MarkerOptions().position(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude())));
-            });
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PERMISSION_REQUEST_ACCESS_FINE_LOCATION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                displayMyLocation();
-            }
-        }
-    }**/
 }

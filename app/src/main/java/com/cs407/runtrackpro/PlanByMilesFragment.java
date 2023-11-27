@@ -1,6 +1,8 @@
 package com.cs407.runtrackpro;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -13,40 +15,27 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 
 public class PlanByMilesFragment extends Fragment {
-
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
-
-    public PlanByMilesFragment() {}
-
-    public static PlanByMilesFragment newInstance(String param1, String param2) {
-        PlanByMilesFragment fragment = new PlanByMilesFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -58,13 +47,48 @@ public class PlanByMilesFragment extends Fragment {
 
     private static final int PERMISSION_REQUEST_ACCESS_FINE_LOCATION = 12;
     private GoogleMap mMap;
+    Location currentLocation;
     private FusedLocationProviderClient mFusedLocationProviderClient;
+
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.framgent_map);
-        mapFragment.getMapAsync(googleMap -> {
-            mMap = googleMap;
-            displayMyLocation();
+        getLocation();
+
+        EditText miles =(EditText) view.findViewById(R.id.milesInput);
+        Button startButton =(Button) view.findViewById(R.id.startbutton_miles);
+        startButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String input =miles.getText().toString();
+                if(input !=null){
+                    Intent intent =new Intent(getActivity(),DuringRunActivity.class);
+                    intent.putExtra("distance",input);
+                    intent.putExtra("plan","m");
+                    startActivity(intent);
+                }
+            }
+        });
+    }
+
+    private void getLocation() {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions((Activity) getContext(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION},PERMISSION_REQUEST_ACCESS_FINE_LOCATION);
+            return;
+        }
+        Task<Location> task = mFusedLocationProviderClient.getLastLocation();
+        task.addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if(location !=null){
+                    currentLocation =location;
+                    SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.framgent_map);
+                    mapFragment.getMapAsync(googleMap -> {
+                        mMap = googleMap;
+                        displayMyLocation();
+                    });
+
+                }
+            }
         });
     }
 
@@ -77,17 +101,9 @@ public class PlanByMilesFragment extends Fragment {
             mFusedLocationProviderClient.getLastLocation().addOnCompleteListener(this.getActivity(), task -> {
                 Location mLastKnownLocation = task.getResult();
                 mMap.addMarker(new MarkerOptions().position(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude())));
-            });
-        }
-    }
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), 16));
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PERMISSION_REQUEST_ACCESS_FINE_LOCATION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                displayMyLocation();
-            }
+            });
         }
     }
 }

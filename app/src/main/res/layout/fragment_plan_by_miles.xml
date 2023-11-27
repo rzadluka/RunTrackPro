@@ -16,6 +16,12 @@
             android:layout_height="wrap_content"
             android:hint="Enter miles: " />
 
+        <Button
+            android:id="@+id/startbutton_miles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Start" />
+
         <fragment
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/framgent_map"

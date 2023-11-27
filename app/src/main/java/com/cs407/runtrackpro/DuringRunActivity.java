@@ -24,6 +24,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.text.DecimalFormat;
+import java.util.Scanner;
 
 public class DuringRunActivity extends AppCompatActivity{
 
@@ -123,8 +124,29 @@ public class DuringRunActivity extends AppCompatActivity{
         Intent intent =getIntent();
         String startLoc =intent.getStringExtra("start");
         String endLoc =intent.getStringExtra("end");
-        String distance =intent.getStringExtra("distance");
-        Log.d(TAG," "+distance);
+
+        //identify which plan, if the plan is destination, change km to miles.
+        //-----------------------------------------------------------------------
+        String RAW_distance =intent.getStringExtra("distance");
+        double distance =0.0; //<------------Use this to do what you want.
+        String plan =intent.getStringExtra("plan");
+        if(plan.equals("d")){
+            String distance_in_km =RAW_distance;
+            Scanner sc =new Scanner(distance_in_km);
+            double raw_double_distance_in_km =sc.nextDouble();
+            distance =raw_double_distance_in_km*0.621371;
+        }
+        if(plan.equals("m")){
+            double double_distance =Double.parseDouble(RAW_distance);
+            distance =double_distance;
+        }
+        else{
+            //make a toast.
+        }
+        //debug
+        String s=String.valueOf(distance);
+        Log.i(TAG,s);
+        //-----------------------------------------------------------------------
         MapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
