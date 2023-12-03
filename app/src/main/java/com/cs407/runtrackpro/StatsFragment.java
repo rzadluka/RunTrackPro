@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -58,8 +59,37 @@ public class StatsFragment extends Fragment {
         LineChart chart = (LineChart) view.findViewById(R.id.chart);
 
         LineData data = getData(36, 100);
-        setupChart(chart, data, Color.rgb(200, 200, 200));
+        setupChart(chart, data, Color.TRANSPARENT);
 //        chart.setData(data); chart.invalidate();
+
+        if (HomeFragment.stats1.size() != 0) {
+            TextView statsDetails = view.findViewById(R.id.statsDetails);
+            TextView distance = view.findViewById(R.id.distance);
+            TextView time = view.findViewById(R.id.time);
+            TextView pace = view.findViewById(R.id.pace);
+            int statId = HomeFragment.stats1.size() - 1;
+
+            if (statId != -1) {
+                Stats stats = HomeFragment.stats1.get(statId);
+                statsDetails.setText("Your run on " + stats.getDate());
+                ArrayList<Integer> averages = getAverages();
+                distance.setText(averages.get(0).toString());
+                time.setText(averages.get(1).toString());
+                pace.setText(averages.get(2).toString());
+            }
+        } else {
+            TextView previousRunDate = view.findViewById(R.id.previousRunDate);
+            TextView previousRunDistance = view.findViewById(R.id.previousRunDistance);
+            TextView previousRunTime = view.findViewById(R.id.previousRunTime);
+            TextView previousRunPace = view.findViewById(R.id.previousRunPace);
+            TextView previousRunElevDiff = view.findViewById(R.id.previousRunElevDiff);
+
+            previousRunDate.setText("No runs yet");
+            previousRunDistance.setText("0.0");
+            previousRunTime.setText("0.0");
+            previousRunPace.setText("0.0");
+            previousRunElevDiff.setText("0.0");
+        }
     }
 
     private LineData getData(int count, float range) {
@@ -73,16 +103,13 @@ public class StatsFragment extends Fragment {
 
         // create a dataset and give it a type
         LineDataSet set1 = new LineDataSet(values, "DataSet 1");
-//         set1.setFillAlpha(110);
-//         set1.setFillColor(Color.RED);
 
         set1.setLineWidth(1.75f);
         set1.setCircleRadius(5f);
         set1.setCircleHoleRadius(2.5f);
-        set1.setColor(Color.WHITE);
-        set1.setCircleColor(Color.MAGENTA);
-//        set1.setHighLightColor(Color.WHITE);
-//        set1.setDrawValues(false);
+        set1.setColor(Color.rgb(108,75,171));
+        set1.setCircleColor(Color.rgb(108,75,171));
+        set1.setDrawValues(false);
 
         // create a data object with the data sets
         return new LineData(set1);
@@ -98,12 +125,30 @@ public class StatsFragment extends Fragment {
 
         chart.getDescription().setEnabled(false);
         chart.setBackgroundColor(color);
+        chart.setDrawGridBackground(false);
 
         // add data
         chart.setData(data);
 
         // animate calls invalidate()...
         chart.animateX(2500);
+    }
+
+    private ArrayList<Integer> getAverages() {
+        int totalDistance = 0;
+        int totalTime = 0;
+        int totalPace = 0;
+        int size = HomeFragment.stats1.size();
+        for (int i = 0; i < size; i++) {
+            totalDistance += Integer.parseInt(HomeFragment.stats1.get(i).getDistance());
+            totalTime += Integer.parseInt(HomeFragment.stats1.get(i).getTime());
+            totalPace += Integer.parseInt(HomeFragment.stats1.get(i).getDistance())/Integer.parseInt(HomeFragment.stats1.get(i).getTime());
+        }
+        ArrayList<Integer> averages = new ArrayList<>();
+        averages.add(totalDistance / size);
+        averages.add(totalTime / size);
+        averages.add(totalPace / size);
+        return averages;
     }
 
 }

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".StatsFragment">
 
     <LinearLayout
@@ -10,12 +11,175 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/statsDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Overall Stats"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/statsDetails">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_margin="20dp" >
+
+                <TextView
+                    android:id="@+id/distanceTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Avg Distance (mi)" />
+
+                <TextView
+                    android:id="@+id/distance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="loading..."
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_margin="20dp" >
+
+                <TextView
+                    android:id="@+id/timeTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Avg Time" />
+
+                <TextView
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="loading..."
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_margin="20dp" >
+
+                <TextView
+                    android:id="@+id/paceTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Avg Pace" />
+
+                <TextView
+                    android:id="@+id/pace"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="loading..."
+                    android:textSize="20sp" />
+            </LinearLayout>
+        </LinearLayout>
+
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/chart"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:layout_marginTop="50dp"/>
+            android:layout_height="200dp" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/previousRunTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Previous Run"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="20dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/previousRunDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="loading..."
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Distance: "
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/previousRunDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="loading..."
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Time: "
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/previousRunTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="loading..."
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pace: "
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/previousRunPace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="loading..."
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/previousRunElevGain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Elev Diff: "
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/previousRunElevDiff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="loading..."
+                android:textSize="20sp" />
+        </LinearLayout>
     </LinearLayout>
-
 </FrameLayout>
