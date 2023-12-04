@@ -17,12 +17,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Context context =getApplicationContext();
-        SQLiteDatabase db =context.openOrCreateDatabase("NoteSQL",Context.MODE_PRIVATE,null);
-        dbHelper.sqLiteDatabase =db;
-
-        dbHelper = DBHelper.getInstance();
-
         FragmentManager fragmentManager =getSupportFragmentManager();
         Button HomeFragmentButton =findViewById(R.id.home_button);
         HomeFragmentButton.setOnClickListener(new View.OnClickListener() {

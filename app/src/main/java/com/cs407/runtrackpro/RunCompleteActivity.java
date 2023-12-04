@@ -1,7 +1,6 @@
 package com.cs407.runtrackpro;
 
 import static android.content.ContentValues.TAG;
-import static com.cs407.runtrackpro.DBHelper.sqLiteDatabase;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -33,7 +32,7 @@ public class RunCompleteActivity extends AppCompatActivity {
         distanceText.append(getIntent().getExtras().getString("distance"));
 
         //Create a DBhelper.
-        DBHelper dbHelper =DBHelper.getInstance();
+        DBHelper dbHelper =DBHelper.getInstance(getApplicationContext());
         //Get date.
         DateFormat dateFormat = new SimpleDateFormat("MM/DD/YYYY HH:mm:ss");
         String date =dateFormat.format(new Date());

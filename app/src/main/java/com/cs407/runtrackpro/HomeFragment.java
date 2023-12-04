@@ -67,7 +67,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        DBHelper dbHelper =DBHelper.getInstance();
+        DBHelper dbHelper =DBHelper.getInstance(getContext());
         stats1 = dbHelper.readStats();
 
         for (Stats stats: stats1) {

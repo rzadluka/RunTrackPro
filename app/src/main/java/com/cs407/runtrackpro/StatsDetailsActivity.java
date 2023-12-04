@@ -57,8 +57,8 @@ public class StatsDetailsActivity extends AppCompatActivity {
                 } else {
                     SQLiteDatabase sqLiteDatabase = getApplicationContext().openOrCreateDatabase("stats",
                             Context.MODE_PRIVATE, null);
-                    DBHelper dbHelper = new DBHelper(sqLiteDatabase);
-                    dbHelper.deleteStats(date);
+                    DBHelper.getInstance(getApplicationContext());
+                    //DBHelper.deleteStats(date);
 
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
