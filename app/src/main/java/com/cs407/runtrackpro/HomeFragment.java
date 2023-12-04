@@ -56,7 +56,7 @@ public class HomeFragment extends Fragment {
             displayStats.clear();
             for (Stats stats : stats1) {
                 displayStats.add(String.format(
-                        "Date: %s\nTime: %s\nDistance: %s\n",
+                        "Date: %s%nTime: %s%nDistance: %s%n",
                         stats.getDate(),
                         stats.getTime(),
                         stats.getDistance()

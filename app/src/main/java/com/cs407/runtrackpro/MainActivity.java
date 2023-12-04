@@ -1,6 +1,9 @@
 package com.cs407.runtrackpro;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -41,21 +44,25 @@ public class MainActivity extends AppCompatActivity {
         });
 
         Button StatsFragmentButton = findViewById(R.id.stat_button);
+        SQLiteDatabase sqLiteDatabase = this.openOrCreateDatabase("stats",
+                Context.MODE_PRIVATE, null);
+        DBHelper dbHelper = new DBHelper(sqLiteDatabase);
         StatsFragmentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fragmentMainContainerView, StatsFragment.class, null)
-                        .setReorderingAllowed(true)
-                        .addToBackStack("Showing Fragment1")
-                        .commit();
+                if (!dbHelper.readStats().isEmpty()) {
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.fragmentMainContainerView, StatsFragment.class, null)
+                            .setReorderingAllowed(true)
+                            .addToBackStack("Showing Fragment1")
+                            .commit();
+                }else {
+                    Log.d("MainActivity", "onClick: No stats to display");
+                }
 
             }
         });
 
     }
 
-    public void EnabledMilesButtonByDefault() {
-
-    }
 }

@@ -97,7 +97,7 @@ public class StatsFragment extends Fragment {
             previousRunPace.setText(formatPace(getPace(stats)));
         } else {
             // Fail-safe in case there are no runs. Should never get here.
-            Log.d("StatsFragment", "No runs found");
+            Log.d("StatsFragment", "No runs found, should never get here");
             Intent intent = new Intent(getContext(), MainActivity.class);
             startActivity(intent);
         }
