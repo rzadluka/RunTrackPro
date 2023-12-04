@@ -29,32 +29,31 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            >
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/home_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
                 android:layout_weight="1"
-                android:text="Home"
-                android:layout_gravity="bottom"/>
+                android:text="Home" />
 
             <Button
                 android:id="@+id/plan_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
                 android:layout_weight="1"
-                android:text="Plan a Run"
-                android:layout_gravity="bottom"/>
+                android:text="Plan a Run" />
 
             <Button
                 android:id="@+id/stat_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
                 android:layout_weight="1"
-                android:text="Stats"
-                android:layout_gravity="bottom"/>
+                android:text="Stats" />
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

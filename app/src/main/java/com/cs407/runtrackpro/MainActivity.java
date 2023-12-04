@@ -1,11 +1,11 @@
 package com.cs407.runtrackpro;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,25 +14,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FragmentManager fragmentManager =getSupportFragmentManager();
-        Button HomeFragmentButton =findViewById(R.id.home_button);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Button HomeFragmentButton = findViewById(R.id.home_button);
         HomeFragmentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 fragmentManager.beginTransaction()
-                        .replace(R.id.fragmentMainContainerView, HomeFragment.class,null)
+                        .replace(R.id.fragmentMainContainerView, HomeFragment.class, null)
                         .setReorderingAllowed(true)
                         .addToBackStack("Showing Home")
                         .commit();
             }
         });
 
-        Button RunFragmentButton =findViewById(R.id.plan_button);
+        Button RunFragmentButton = findViewById(R.id.plan_button);
         RunFragmentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 fragmentManager.beginTransaction()
-                        .replace(R.id.fragmentMainContainerView, PlanRunFragment.class,null)
+                        .replace(R.id.fragmentMainContainerView, PlanRunFragment.class, null)
                         .setReorderingAllowed(true)
                         .addToBackStack("Showing Fragment1")
                         .commit();
@@ -40,12 +40,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button StatsFragmentButton =findViewById(R.id.stat_button);
+        Button StatsFragmentButton = findViewById(R.id.stat_button);
         StatsFragmentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 fragmentManager.beginTransaction()
-                        .replace(R.id.fragmentMainContainerView,StatsFragment.class,null)
+                        .replace(R.id.fragmentMainContainerView, StatsFragment.class, null)
                         .setReorderingAllowed(true)
                         .addToBackStack("Showing Fragment1")
                         .commit();
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void EnabledMilesButtonByDefault(){
+    public void EnabledMilesButtonByDefault() {
 
     }
 }

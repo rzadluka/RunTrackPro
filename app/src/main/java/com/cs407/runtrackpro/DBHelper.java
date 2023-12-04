@@ -9,7 +9,7 @@ public class DBHelper {
     static SQLiteDatabase sqLiteDatabase;
 
     public DBHelper(SQLiteDatabase sqLiteDatabase) {
-        this.sqLiteDatabase = sqLiteDatabase;
+        DBHelper.sqLiteDatabase = sqLiteDatabase;
     }
 
     public static void createTable() {
@@ -19,7 +19,7 @@ public class DBHelper {
 
     public ArrayList<Stats> readStats() {
         createTable();
-        Cursor c = sqLiteDatabase.rawQuery("SELECT * FROM stats", new String[] {});
+        Cursor c = sqLiteDatabase.rawQuery("SELECT * FROM stats", new String[]{});
         int dateIndex = c.getColumnIndex("date");
         int timeIndex = c.getColumnIndex("time");
         int distanceIndex = c.getColumnIndex("distance");
@@ -44,19 +44,19 @@ public class DBHelper {
     public void saveStats(String date, String time, String distance, String speed) {
         createTable();
         sqLiteDatabase.execSQL("INSERT INTO stats (date, time, distance, speed) VALUES (?, ?, ?, ?)",
-                new String[] {date, time, distance, speed});
+                new String[]{date, time, distance, speed});
     }
 
     public void deleteStats(String date) {
         createTable();
         String time = "";
         Cursor cursor = sqLiteDatabase.rawQuery("SELECT time FROM stats WHERE date = ?",
-                new String[] {date});
+                new String[]{date});
         if (cursor.moveToNext()) {
             time = cursor.getString(0);
         }
         sqLiteDatabase.execSQL("DELETE FROM stats WHERE date = ? AND time = ?",
-                new String[] {date, time});
+                new String[]{date, time});
         cursor.close();
     }
 }

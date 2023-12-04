@@ -4,41 +4,36 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
 public class StatsFragment extends Fragment {
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
     protected final String[] months = new String[]{
             "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"
     };
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
     private String mParam1;
     private String mParam2;
 
@@ -52,6 +47,23 @@ public class StatsFragment extends Fragment {
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public static String convertDateToDescription(String dateString) {
+        try {
+            // Parse the original date string
+            SimpleDateFormat originalFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
+            Date date = originalFormat.parse(dateString);
+
+            // Format the Date object into the desired description format
+            SimpleDateFormat descriptionFormat = new SimpleDateFormat("MMMM d", Locale.US);
+            assert date != null;
+            return descriptionFormat.format(date);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
     @Override
@@ -185,23 +197,6 @@ public class StatsFragment extends Fragment {
         int minutes = (int) totalPace / 60;
         int seconds = (int) totalPace % 60;
         return minutes + ":" + String.format("%02d", seconds) + " /mi";
-    }
-
-    public static String convertDateToDescription(String dateString) {
-        try {
-            // Parse the original date string
-            SimpleDateFormat originalFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
-            Date date = originalFormat.parse(dateString);
-
-            // Format the Date object into the desired description format
-            SimpleDateFormat descriptionFormat = new SimpleDateFormat("MMMM d", Locale.US);
-            assert date != null;
-            return descriptionFormat.format(date);
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return "";
-        }
     }
 
     private ArrayList<String> getAverages() {

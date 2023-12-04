@@ -1,41 +1,28 @@
 package com.cs407.runtrackpro;
 
-import static android.content.ContentValues.TAG;
-
-import android.content.Intent;
-import android.nfc.Tag;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
-
-import com.google.android.gms.maps.GoogleMap;
-import com.google.maps.model.LatLng;
-
-import java.security.PublicKey;
-import java.util.List;
-
-public class PlanRunFragment extends Fragment{
+public class PlanRunFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private String mParam1;
-    private String mParam2;
-
     FragmentManager fragmentManager;
     Button milesButton;
     Button DestinationButton;
     Button StartRunButton;
+    private String mParam1;
+    private String mParam2;
 
-    public PlanRunFragment() {}
+    public PlanRunFragment() {
+    }
 
     public static PlanRunFragment newInstance(String param1, String param2) {
         PlanRunFragment fragment = new PlanRunFragment();
@@ -63,12 +50,12 @@ public class PlanRunFragment extends Fragment{
     }
 
     @Override
-    public void onViewCreated(@NonNull View view,@NonNull Bundle savedInstanceState){
+    public void onViewCreated(@NonNull View view, @NonNull Bundle savedInstanceState) {
         fragmentManager = getParentFragmentManager();
 
         // start by showing the "Plan By Miles" container as default
         fragmentManager.beginTransaction()
-                .replace(R.id.fragmentRunContainerView, PlanByMilesFragment.class,null)
+                .replace(R.id.fragmentRunContainerView, PlanByMilesFragment.class, null)
                 .setReorderingAllowed(true)
                 .addToBackStack("Showing Plan by Miles")
                 .commit();
@@ -79,7 +66,7 @@ public class PlanRunFragment extends Fragment{
             public void onClick(View view) {
                 //Show map API and input miles.
                 fragmentManager.beginTransaction()
-                        .replace(R.id.fragmentRunContainerView, PlanByMilesFragment.class,null)
+                        .replace(R.id.fragmentRunContainerView, PlanByMilesFragment.class, null)
                         .setReorderingAllowed(true)
                         .addToBackStack("Showing Plan by Miles")
                         .commit();
@@ -92,7 +79,7 @@ public class PlanRunFragment extends Fragment{
             public void onClick(View view) {
                 //Show map API and start location and end location.
                 fragmentManager.beginTransaction()
-                        .replace(R.id.fragmentRunContainerView, PlanByDestinationFragment.class,null)
+                        .replace(R.id.fragmentRunContainerView, PlanByDestinationFragment.class, null)
                         .setReorderingAllowed(true)
                         .addToBackStack("Showing Plan by Destination")
                         .commit();

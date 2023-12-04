@@ -1,10 +1,10 @@
 package com.cs407.runtrackpro;
 
 public class Stats {
-    private String date;
-    private String time;
-    private String distance;
-    private String speed;
+    private final String date;
+    private final String time;
+    private final String distance;
+    private final String speed;
 
     public Stats(String date, String time, String distance, String speed) {
         this.date = date;

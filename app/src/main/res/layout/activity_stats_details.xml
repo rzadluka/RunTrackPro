@@ -29,9 +29,9 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_margin="20dp"
             android:gravity="center"
-            android:layout_margin="20dp" >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/distanceTitle"
@@ -50,9 +50,9 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_margin="20dp"
             android:gravity="center"
-            android:layout_margin="20dp" >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/timeTitle"
@@ -71,9 +71,9 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_margin="20dp"
             android:gravity="center"
-            android:layout_margin="20dp" >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/speedTitle"
@@ -117,8 +117,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="60dp"
-            android:text="DELETE"
             android:onClick="deleteButtonFunction"
+            android:text="DELETE"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

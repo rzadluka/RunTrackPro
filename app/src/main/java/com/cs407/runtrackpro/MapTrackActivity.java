@@ -2,10 +2,6 @@ package com.cs407.runtrackpro;
 
 import static android.content.ContentValues.TAG;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -15,6 +11,8 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -47,19 +45,19 @@ public class MapTrackActivity extends AppCompatActivity {
         mapFragment.getMapAsync(googleMap -> {
             mMap = googleMap;
         });
-        String API_KEY ="AIzaSyBwGEk3QqFSCRWgm063zpbmFhEWzEx-I7Q";
-        Context appContext =this.getApplicationContext();
-        Places.initialize(appContext,API_KEY);
-        PlacesClient placesClient =Places.createClient(appContext);
-        GeoApiContext context =new GeoApiContext.Builder()
+        String API_KEY = "AIzaSyBwGEk3QqFSCRWgm063zpbmFhEWzEx-I7Q";
+        Context appContext = this.getApplicationContext();
+        Places.initialize(appContext, API_KEY);
+        PlacesClient placesClient = Places.createClient(appContext);
+        GeoApiContext context = new GeoApiContext.Builder()
                 .apiKey(API_KEY)
                 .build();
 
-        Button BackButton =findViewById(R.id.BackButton);
-        Intent intent =getIntent();
-        String startLoc =intent.getStringExtra("start");
-        String endLoc =intent.getStringExtra("end");
-        ReBuildMap(startLoc,endLoc,context);
+        Button BackButton = findViewById(R.id.BackButton);
+        Intent intent = getIntent();
+        String startLoc = intent.getStringExtra("start");
+        String endLoc = intent.getStringExtra("end");
+        ReBuildMap(startLoc, endLoc, context);
         //
 
         BackButton.setOnClickListener(new View.OnClickListener() {
@@ -70,7 +68,7 @@ public class MapTrackActivity extends AppCompatActivity {
         });
     }
 
-    private void ReBuildMap(String start, String end, GeoApiContext context){
+    private void ReBuildMap(String start, String end, GeoApiContext context) {
         DirectionsApiRequest directions = DirectionsApi.newRequest(context)
                 .origin(start)
                 .destination(end)
@@ -78,13 +76,13 @@ public class MapTrackActivity extends AppCompatActivity {
         directions.setCallback(new PendingResult.Callback<DirectionsResult>() {
             @Override
             public void onResult(DirectionsResult result) {
-                if(result !=null && result.routes.length >0){
+                if (result != null && result.routes.length > 0) {
                     LatLng startLatLng = new LatLng(result.routes[0].legs[0].startLocation.lat,
                             result.routes[0].legs[0].startLocation.lng);
                     LatLng endLatLng = new LatLng(result.routes[0].legs[0].endLocation.lat,
                             result.routes[0].legs[0].endLocation.lng);
                     //
-                    adjustCamera(startLatLng,endLatLng);
+                    adjustCamera(startLatLng, endLatLng);
                     drawRoute(result.routes[0].overviewPolyline.decodePath());
                     //
                 }
@@ -98,11 +96,11 @@ public class MapTrackActivity extends AppCompatActivity {
     }
 
     //Zoom the camera to adjust the view (small bug)
-    private void adjustCamera(LatLng startLoc, LatLng endLoc){
+    private void adjustCamera(LatLng startLoc, LatLng endLoc) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                if(mMap !=null){
+                if (mMap != null) {
                     com.google.android.gms.maps.model.LatLng gmsStartLocation =
                             new com.google.android.gms.maps.model.LatLng(startLoc.lat, startLoc.lng);
 
@@ -126,12 +124,12 @@ public class MapTrackActivity extends AppCompatActivity {
     }
     //
 
-    private void drawRoute(List<LatLng> path){
+    private void drawRoute(List<LatLng> path) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                List<com.google.android.gms.maps.model.LatLng> gmsPath =new ArrayList<>();
-                for(com.google.maps.model.LatLng latLng : path){
+                List<com.google.android.gms.maps.model.LatLng> gmsPath = new ArrayList<>();
+                for (com.google.maps.model.LatLng latLng : path) {
                     gmsPath.add(new com.google.android.gms.maps.model.LatLng(latLng.lat, latLng.lng));
                 }
                 PolylineOptions polylineOptions = new PolylineOptions()

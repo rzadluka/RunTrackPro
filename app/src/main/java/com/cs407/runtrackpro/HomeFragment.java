@@ -4,9 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,20 +11,21 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import androidx.fragment.app.Fragment;
+
 import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    public static ArrayList<Stats> stats1 = new ArrayList<>();
     private String mParam1;
     private String mParam2;
+    private final ArrayList<String> displayStats = new ArrayList<>();
 
-    private ArrayList<String> displayStats = new ArrayList<>();
-    public static ArrayList<Stats> stats1 = new ArrayList<>();
-
-    public HomeFragment() {}
+    public HomeFragment() {
+    }
 
     public static HomeFragment newInstance(String param1, String param2) {
         HomeFragment fragment = new HomeFragment();
@@ -52,7 +50,7 @@ public class HomeFragment extends Fragment {
 
         stats1 = dbHelper.readStats();
 
-        for (Stats stats: stats1) {
+        for (Stats stats : stats1) {
             displayStats.add(String.format(
                     "Date: %s\nTime: %s\nDistance: %s\n",
                     stats.getDate(),

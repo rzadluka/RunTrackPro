@@ -8,95 +8,119 @@ public class Result {
     private List<Rows> rows;
     private String status;
 
-    public void setDestination_addresses(List<String> destination_addresses){
-        this.destination_addresses =destination_addresses;
-    }
-
-    public List<String> getDestination_addresses(){
+    public List<String> getDestination_addresses() {
         return this.destination_addresses;
     }
 
-    public void setOrigin_addresses(List<String> origin_addresses){
-        this.origin_addresses =origin_addresses;
+    public void setDestination_addresses(List<String> destination_addresses) {
+        this.destination_addresses = destination_addresses;
     }
-    public List<String> getOrigin_addresses(){
+
+    public List<String> getOrigin_addresses() {
         return this.origin_addresses;
     }
-    public void setRows(List<Rows> rows){
-        this.rows =rows;
+
+    public void setOrigin_addresses(List<String> origin_addresses) {
+        this.origin_addresses = origin_addresses;
     }
-    public List<Rows> getRows(){
+
+    public List<Rows> getRows() {
         return this.rows;
     }
-    public void setStatus(String status){
-        this.status =status;
+
+    public void setRows(List<Rows> rows) {
+        this.rows = rows;
     }
-    public String getStatus(){
+
+    public String getStatus() {
         return this.status;
     }
 
-    public class Distance{
-        private String text;
-        private int value;
-        public void setText(String text){
-            this.text =text;
-        }
-        public String getText(){return this.text;}
-        public void setValue(int value){
-            this.value =value;
-        }
-        public int getValue(){
-            return this.value;
-        }
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public class Duration{
+    public class Distance {
         private String text;
         private int value;
-        public void setText(String text){
-            this.text =text;
-        }
-        public String getText(){
+
+        public String getText() {
             return this.text;
         }
-        public void setValue(int Value){
-            this.value =value;
+
+        public void setText(String text) {
+            this.text = text;
         }
-        public int getValue(){
+
+        public int getValue() {
             return this.value;
+        }
+
+        public void setValue(int value) {
+            this.value = value;
         }
     }
 
-    public class Elements{
+    public class Duration {
+        private String text;
+        private int value;
+
+        public String getText() {
+            return this.text;
+        }
+
+        public void setText(String text) {
+            this.text = text;
+        }
+
+        public int getValue() {
+            return this.value;
+        }
+
+        public void setValue(int Value) {
+            this.value = value;
+        }
+    }
+
+    public class Elements {
         private Distance distance;
         private Duration duration;
         private String status;
-        public void setDistance(Distance distance){
-            this.distance =distance;
-        }
-        public Distance getDistance(){
+
+        public Distance getDistance() {
             return this.distance;
         }
-        public void setDuration(Duration duration){
-            this.duration =duration;
+
+        public void setDistance(Distance distance) {
+            this.distance = distance;
         }
-        public Duration getDuration(){
+
+        public Duration getDuration() {
             return this.duration;
         }
-        public void setStatus(String status){
-            this.status =status;
+
+        public void setDuration(Duration duration) {
+            this.duration = duration;
         }
-        public String getStatus(){
+
+        public String getStatus() {
             return this.status;
         }
-    }
-    public class Rows{
-        private List<Elements> elements;
-        public void setElements(List<Elements> elements){
-            this.elements =elements;
+
+        public void setStatus(String status) {
+            this.status = status;
         }
-        public List<Elements> getElements(){
+    }
+
+    public class Rows {
+        private List<Elements> elements;
+
+        public List<Elements> getElements() {
             return this.elements;
+        }
+
+        public void setElements(List<Elements> elements) {
+            this.elements = elements;
         }
     }
 }
