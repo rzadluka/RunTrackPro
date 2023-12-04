@@ -17,7 +17,7 @@ public class DBHelper extends SQLiteOpenHelper {
     dbHelper = DBHelper.getInstance();**/
 
     private static volatile DBHelper INSTANCE =null;
-    private static final String DATABASE_NAME = "NoteSQL";
+    private static final String DATABASE_NAME = "RunningSQL";
     private static final int DATABASE_VERSION = 1;
 
     //static SQLiteDatabase sqLiteDatabase;

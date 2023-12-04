@@ -55,10 +55,8 @@ public class StatsDetailsActivity extends AppCompatActivity {
                 if (statId == -1) {
                     Toast.makeText(StatsDetailsActivity.this, "Cannot delete stat that doesn't exist", Toast.LENGTH_SHORT).show();
                 } else {
-                    SQLiteDatabase sqLiteDatabase = getApplicationContext().openOrCreateDatabase("stats",
-                            Context.MODE_PRIVATE, null);
-                    DBHelper.getInstance(getApplicationContext());
-                    //DBHelper.deleteStats(date);
+                    DBHelper dbHelper =DBHelper.getInstance(getApplicationContext());
+                    dbHelper.deleteStats(date);
 
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
