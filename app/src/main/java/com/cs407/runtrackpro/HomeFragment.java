@@ -50,13 +50,13 @@ public class HomeFragment extends Fragment {
         DBHelper dbHelper = new DBHelper(sqLiteDatabase);
 
         stats1 = dbHelper.readStats();
-        if (stats1.size() == 0) {
+        if (stats1.isEmpty()) {
             displayStats.add("No data to display, Start your first run to see stats here!");
         }else {
             displayStats.clear();
             for (Stats stats : stats1) {
                 displayStats.add(String.format(
-                        "Date: %s\nTime: %s\nDistance: %s\n",
+                        "Date: %s%nTime: %s%nDistance: %s%n",
                         stats.getDate(),
                         stats.getTime(),
                         stats.getDistance()
