@@ -49,23 +49,6 @@ public class StatsFragment extends Fragment {
         return fragment;
     }
 
-    public static String convertDateToDescription(String dateString) {
-        try {
-            // Parse the original date string
-            SimpleDateFormat originalFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
-            Date date = originalFormat.parse(dateString);
-
-            // Format the Date object into the desired description format
-            SimpleDateFormat descriptionFormat = new SimpleDateFormat("MMMM d", Locale.US);
-            assert date != null;
-            return descriptionFormat.format(date);
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return "";
-        }
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -162,6 +145,8 @@ public class StatsFragment extends Fragment {
         leftAxis.setDrawGridLines(false);
         leftAxis.setAxisMinimum(0f);
         leftAxis.setValueFormatter((value, axis) -> formatTime((int) value));
+        leftAxis.setLabelCount(6, true);
+        leftAxis.setGranularity(1f);
 
         // X Axis
         XAxis xAxis = chart.getXAxis();
@@ -197,6 +182,23 @@ public class StatsFragment extends Fragment {
         int minutes = (int) totalPace / 60;
         int seconds = (int) totalPace % 60;
         return minutes + ":" + String.format("%02d", seconds) + " /mi";
+    }
+
+    public static String convertDateToDescription(String dateString) {
+        try {
+            // Parse the original date string
+            SimpleDateFormat originalFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
+            Date date = originalFormat.parse(dateString);
+
+            // Format the Date object into the desired description format
+            SimpleDateFormat descriptionFormat = new SimpleDateFormat("MMMM d", Locale.US);
+            assert date != null;
+            return descriptionFormat.format(date);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
     private ArrayList<String> getAverages() {
