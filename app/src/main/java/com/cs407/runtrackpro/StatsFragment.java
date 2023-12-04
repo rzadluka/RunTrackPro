@@ -27,12 +27,14 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
 public class StatsFragment extends Fragment {
-    protected final String[] week = new String[] {
-            "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"
+    protected final String[] months = new String[]{
+            "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"
     };
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -95,9 +97,9 @@ public class StatsFragment extends Fragment {
             pace.setText(averages.get(2));
 
             // Populate previous run stats
-            previousRunDistance.setText(stats.getDistance() + " mi");
+            previousRunDistance.setText(formatDistance(Double.parseDouble(stats.getDistance())));
             previousRunTime.setText(stats.getTime());
-            previousRunPace.setText(stats.getSpeed() + " min/mi");
+            previousRunPace.setText(formatPace(getPace(stats)));
         } else {
             // Fail-safe in case there are no runs. Should never get here.
             Log.d("StatsFragment", "No runs found");
@@ -107,32 +109,22 @@ public class StatsFragment extends Fragment {
     }
 
     private LineData getData() {
-        ArrayList<Entry> values = new ArrayList<>();
+        // comment this out if using dummy data
+        ArrayList<Entry> values = getMonthlyTotal();
 
-//        double size = HomeFragment.stats1.size();
-//        for (int i = 0; i < size; i++) {
-//            // Split the time string into minutes and seconds
-//            String[] timeParts = HomeFragment.stats1.get(i).getTime().split(":");
-//            if (timeParts.length == 2) {
-//                int minutes = Integer.parseInt(timeParts[0]);
-//                int seconds = Integer.parseInt(timeParts[1]);
-//
-//                // Convert time to seconds and add to totalTimeSeconds
-//                values.add(new Entry(i,  minutes * 60 + seconds));
+        // Add dummy data
+//        ArrayList<Entry> values = new ArrayList<>();
+//        for (int i = 0; i < 7; i++) {
+//            if (i == 3 || i == 4 || i == 5) {
+//                values.add(new Entry(i, 0));
+//                continue;
 //            }
+//            float val = (float) (Math.random() * 1200) + 3;
+//            values.add(new Entry(i, val));
 //        }
 
-        for (int i = 0; i < 7; i++) {
-            if (i == 3 || i == 4 || i == 5) {
-                values.add(new Entry(i, 0));
-                continue;
-            }
-            float val = (float) (Math.random() * 1200) + 3;
-            values.add(new Entry(i, val));
-        }
-
         // create a dataset and give it a type
-        LineDataSet set1 = new LineDataSet(values, "Time For Each Run");
+        LineDataSet set1 = new LineDataSet(values, "Total Time Each Month");
         set1.setLineWidth(1.75f);
         set1.setCircleRadius(5f);
         set1.setCircleHoleRadius(2.5f);
@@ -164,7 +156,7 @@ public class StatsFragment extends Fragment {
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setAxisMinimum(0f);
         xAxis.setGranularity(1f);
-        xAxis.setValueFormatter((value, axis) -> week[(int) value % week.length]);
+        xAxis.setValueFormatter((value, axis) -> months[(int) value % months.length]);
 
         // Chart styling
         chart.getDescription().setEnabled(false);
@@ -192,7 +184,7 @@ public class StatsFragment extends Fragment {
     private String formatPace(double totalPace) {
         int minutes = (int) totalPace / 60;
         int seconds = (int) totalPace % 60;
-        return minutes + ":" + String.format("%02d", seconds) + " min/mi";
+        return minutes + ":" + String.format("%02d", seconds) + " /mi";
     }
 
     public static String convertDateToDescription(String dateString) {
@@ -243,4 +235,49 @@ public class StatsFragment extends Fragment {
         return averages;
     }
 
+    private ArrayList<Entry> getMonthlyTotal() {
+        HashMap<Integer, Integer> monthlyTotal = new HashMap<>();
+
+        double size = HomeFragment.stats1.size();
+        for (int i = 0; i < size; i++) {
+            String[] dateParts = HomeFragment.stats1.get(i).getDate().split(" ")[0].split("/");
+            if (dateParts.length == 3) {
+                int month = Integer.parseInt(dateParts[0]);
+
+                String[] timeParts = HomeFragment.stats1.get(i).getTime().split(":");
+                int minutes = Integer.parseInt(timeParts[0]);
+                int seconds = Integer.parseInt(timeParts[1]);
+                int totalSeconds = minutes * 60 + seconds;
+
+                // Add to the total time for the corresponding month
+                monthlyTotal.put(month, monthlyTotal.getOrDefault(month, 0) + totalSeconds);
+            }
+        }
+
+        // Convert the HashMap to ArrayList<Entry>
+        ArrayList<Entry> values = new ArrayList<>();
+        for (int month = 1; month <= 12; month++) {
+            int totalSeconds = monthlyTotal.getOrDefault(month, 0);
+            values.add(new Entry(month - 1, totalSeconds));
+        }
+
+        return values;
+    }
+
+    private double getPace(Stats stats) {
+        int totalTimeSeconds = 0;
+        double distance = Double.parseDouble(stats.getDistance());
+
+        // Split the time string into minutes and seconds
+        String[] timeParts = stats.getTime().split(":");
+        if (timeParts.length == 2) {
+            int minutes = Integer.parseInt(timeParts[0]);
+            int seconds = Integer.parseInt(timeParts[1]);
+
+            // Convert time to seconds and add to totalTimeSeconds
+            totalTimeSeconds += minutes * 60 + seconds;
+        }
+
+        return distance > 0 ? (totalTimeSeconds / distance) : 0;
+    }
 }
