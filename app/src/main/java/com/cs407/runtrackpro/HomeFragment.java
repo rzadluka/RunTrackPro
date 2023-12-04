@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
@@ -49,14 +50,18 @@ public class HomeFragment extends Fragment {
         DBHelper dbHelper = new DBHelper(sqLiteDatabase);
 
         stats1 = dbHelper.readStats();
-
-        for (Stats stats : stats1) {
-            displayStats.add(String.format(
-                    "Date: %s\nTime: %s\nDistance: %s\n",
-                    stats.getDate(),
-                    stats.getTime(),
-                    stats.getDistance()
-            ));
+        if (stats1.size() == 0) {
+            displayStats.add("No data to display, Start your first run to see stats here!");
+        }else {
+            displayStats.clear();
+            for (Stats stats : stats1) {
+                displayStats.add(String.format(
+                        "Date: %s\nTime: %s\nDistance: %s\n",
+                        stats.getDate(),
+                        stats.getTime(),
+                        stats.getDistance()
+                ));
+            }
         }
     }
 
