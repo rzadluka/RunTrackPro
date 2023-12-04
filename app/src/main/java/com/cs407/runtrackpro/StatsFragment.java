@@ -110,7 +110,7 @@ public class StatsFragment extends Fragment {
 
             // Populate previous run stats
             previousRunDistance.setText(formatDistance(Double.parseDouble(stats.getDistance())));
-            previousRunTime.setText(stats.getTime());
+            previousRunTime.setText(formatTime(getTimeInSeconds(stats)));
             previousRunPace.setText(formatPace(getPace(stats)));
         } else {
             // Fail-safe in case there are no runs. Should never get here.
@@ -184,7 +184,7 @@ public class StatsFragment extends Fragment {
     private String formatTime(int totalTimeSeconds) {
         int hours = totalTimeSeconds / 3600;
         int minutes = (totalTimeSeconds % 3600) / 60;
-        return hours + "h " + String.format("%02d", minutes) + "m";
+        return String.format("%dh %02dm", hours, minutes);
     }
 
     @SuppressLint("DefaultLocale")
@@ -208,15 +208,7 @@ public class StatsFragment extends Fragment {
         for (int i = 0; i < size; i++) {
             totalDistance += Double.parseDouble(HomeFragment.stats1.get(i).getDistance());
 
-            // Split the time string into minutes and seconds
-            String[] timeParts = HomeFragment.stats1.get(i).getTime().split(":");
-            if (timeParts.length == 2) {
-                int minutes = Integer.parseInt(timeParts[0]);
-                int seconds = Integer.parseInt(timeParts[1]);
-
-                // Convert time to seconds and add to totalTimeSeconds
-                totalTimeSeconds += minutes * 60 + seconds;
-            }
+            totalTimeSeconds += getTimeInSeconds(HomeFragment.stats1.get(i));
 
             double pace = totalDistance > 0 ? totalTimeSeconds / totalDistance : 0;
             totalPace += pace;
@@ -231,7 +223,7 @@ public class StatsFragment extends Fragment {
     }
 
     private ArrayList<Entry> getMonthlyTotal() {
-        HashMap<Integer, Integer> monthlyTotal = new HashMap<>();
+        HashMap<Integer, Integer[]> monthlyTotal = new HashMap<>();
 
         double size = HomeFragment.stats1.size();
         for (int i = 0; i < size; i++) {
@@ -240,24 +232,34 @@ public class StatsFragment extends Fragment {
                 int month = Integer.parseInt(dateParts[0]);
 
                 String[] timeParts = HomeFragment.stats1.get(i).getTime().split(":");
-                int minutes = Integer.parseInt(timeParts[0]);
-                int seconds = Integer.parseInt(timeParts[1]);
-                int totalSeconds = minutes * 60 + seconds;
+                int hours = Integer.parseInt(timeParts[0]);
+                int minutes = Integer.parseInt(timeParts[1]);
+                int seconds = Integer.parseInt(timeParts[2]);
 
                 // Add to the total time for the corresponding month
-                monthlyTotal.put(month, monthlyTotal.getOrDefault(month, 0) + totalSeconds);
+                if (!monthlyTotal.containsKey(month)) {
+                    monthlyTotal.put(month, new Integer[]{hours, minutes, seconds});
+                } else {
+                    Integer[] existingTime = monthlyTotal.get(month);
+                    existingTime[0] += hours;
+                    existingTime[1] += minutes;
+                    existingTime[2] += seconds;
+                    monthlyTotal.put(month, existingTime);
+                }
             }
         }
 
         // Convert the HashMap to ArrayList<Entry>
         ArrayList<Entry> values = new ArrayList<>();
         for (int month = 1; month <= 12; month++) {
-            int totalSeconds = monthlyTotal.getOrDefault(month, 0);
+            Integer[] totalTimes = monthlyTotal.getOrDefault(month, new Integer[]{0, 0, 0});
+            int totalSeconds = totalTimes[0] * 3600 + totalTimes[1] * 60 + totalTimes[2];
             values.add(new Entry(month - 1, totalSeconds));
         }
 
         return values;
     }
+
 
     private double getPace(Stats stats) {
         int totalTimeSeconds = 0;
@@ -274,5 +276,13 @@ public class StatsFragment extends Fragment {
         }
 
         return distance > 0 ? (totalTimeSeconds / distance) : 0;
+    }
+
+    private int getTimeInSeconds(Stats stats) {
+        String[] timeParts = stats.getTime().split(":");
+        int hours = Integer.parseInt(timeParts[0]);
+        int minutes = Integer.parseInt(timeParts[1]);
+        int seconds = Integer.parseInt(timeParts[2]);
+        return hours * 3600 + minutes * 60 + seconds;
     }
 }
