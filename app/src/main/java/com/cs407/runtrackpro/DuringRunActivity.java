@@ -9,6 +9,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
@@ -23,7 +24,11 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class DuringRunActivity extends AppCompatActivity{
@@ -62,6 +67,8 @@ public class DuringRunActivity extends AppCompatActivity{
             else {
                 mFusedLocationProviderClient.getLastLocation().addOnCompleteListener(DuringRunActivity.this, task -> {
                     Location currentLocation = task.getResult();
+                    // location logging
+//                    Log.d("Location", "Location: " + currentLocation.getLatitude() + ", " + currentLocation.getLongitude());
                     if(totalMinutes == 0 && totalSeconds == 0) {
                         lastKnownLocation = task.getResult();
                         distanceCovered.setText("0.00 mi");
@@ -159,8 +166,17 @@ public class DuringRunActivity extends AppCompatActivity{
         });
     }
 
-
     public void moveToEndRun() {
+        // save data and run information
+        SQLiteDatabase sqLiteDatabase = getApplicationContext().openOrCreateDatabase("stats",
+                Context.MODE_PRIVATE, null);
+        DBHelper dbHelper = new DBHelper(sqLiteDatabase);
+        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
+        String date = dateFormat.format(new Date());
+        dbHelper.saveStats(date, String.format("%02d:%02d", totalMinutes, totalSeconds),
+                format.format(distance), format.format(pace));
+
+        // move to end run activity
         Intent intent = new Intent(this, RunCompleteActivity.class);
         intent.putExtra("time", String.format("%02d:%02d", totalMinutes, totalSeconds));
         intent.putExtra("distance", "" + format.format(distance));

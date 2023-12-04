@@ -41,7 +41,7 @@
                     android:id="@+id/distanceTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Avg Distance (mi)" />
+                    android:text="Avg Distance" />
 
                 <TextView
                     android:id="@+id/distance"
@@ -109,7 +109,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="Previous Run"
+                android:text="Most recent run"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="20dp"/>
@@ -162,20 +162,6 @@
 
             <TextView
                 android:id="@+id/previousRunPace"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="loading..."
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/previousRunElevGain"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Elev Diff: "
-                android:textSize="15sp" />
-
-            <TextView
-                android:id="@+id/previousRunElevDiff"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="loading..."
