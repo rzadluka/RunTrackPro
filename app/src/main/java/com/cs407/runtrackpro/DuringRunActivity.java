@@ -42,6 +42,8 @@ public class DuringRunActivity extends AppCompatActivity{
     double plan_distance =0;
     double distance = 0;
     double pace = 0;
+
+    double speed;
     Location lastKnownLocation = null;
     Handler timerHandler = new Handler();
     Runnable timerRunnable = new Runnable() {
@@ -73,7 +75,8 @@ public class DuringRunActivity extends AppCompatActivity{
                         distanceTraveled = distanceTraveled/1609.34;
                         distance += distanceTraveled;
                         distanceCovered.setText("" + format.format(distance) + " mi");
-                        double speed = distance / ((totalMinutes * 60 + totalSeconds) / 3600.0);
+                        //double speed = distance / ((totalMinutes * 60 + totalSeconds) / 3600.0);
+                        speed = distance / ((totalMinutes * 60 + totalSeconds) / 3600.0);
                         avgSpeed.setText("" + format.format(speed) + " mph");
                         lastKnownLocation = currentLocation;
                     }
@@ -165,6 +168,7 @@ public class DuringRunActivity extends AppCompatActivity{
         intent.putExtra("time", String.format("%02d:%02d", totalMinutes, totalSeconds));
         intent.putExtra("distance", "" + format.format(distance));
         intent.putExtra("pace", "" + format.format(pace));
+        intent.putExtra("avgSpeed",""+speed);
         startActivity(intent);
     }
 

@@ -3,16 +3,25 @@ package com.cs407.runtrackpro;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
+    public DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Context context =getApplicationContext();
+        SQLiteDatabase db =context.openOrCreateDatabase("NoteSQL",Context.MODE_PRIVATE,null);
+        dbHelper.sqLiteDatabase =db;
+
+        dbHelper = DBHelper.getInstance();
 
         FragmentManager fragmentManager =getSupportFragmentManager();
         Button HomeFragmentButton =findViewById(R.id.home_button);

@@ -45,21 +45,6 @@ public class HomeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-        SQLiteDatabase sqLiteDatabase = getContext().openOrCreateDatabase("stats",
-                Context.MODE_PRIVATE, null);
-        DBHelper dbHelper = new DBHelper(sqLiteDatabase);
-
-        stats1 = dbHelper.readStats();
-
-        for (Stats stats: stats1) {
-            displayStats.add(String.format(
-                    "Date: %s\nTime: %s\nDistance: %s\n",
-                    stats.getDate(),
-                    stats.getTime(),
-                    stats.getDistance()
-            ));
-        }
     }
 
     @Override
@@ -81,6 +66,18 @@ public class HomeFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        DBHelper dbHelper =DBHelper.getInstance();
+        stats1 = dbHelper.readStats();
+
+        for (Stats stats: stats1) {
+            displayStats.add(String.format(
+                    "Date: %s\nTime: %s\nDistance: %s\n",
+                    stats.getDate(),
+                    stats.getTime(),
+                    stats.getDistance()
+            ));
+        }
 
         return view;
     }

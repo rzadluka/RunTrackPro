@@ -6,10 +6,19 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 
 public class DBHelper {
+    private static volatile DBHelper INSTANCE =null;
     static SQLiteDatabase sqLiteDatabase;
 
     public DBHelper(SQLiteDatabase sqLiteDatabase) {
+
         this.sqLiteDatabase = sqLiteDatabase;
+    }
+    public static synchronized DBHelper getInstance(){
+        if(INSTANCE ==null){
+            INSTANCE =new DBHelper(sqLiteDatabase);
+            INSTANCE.createTable();
+        }
+        return INSTANCE;
     }
 
     public static void createTable() {
@@ -18,7 +27,7 @@ public class DBHelper {
     }
 
     public ArrayList<Stats> readStats() {
-        createTable();
+        //createTable();
         Cursor c = sqLiteDatabase.rawQuery("SELECT * FROM stats", new String[] {});
         int dateIndex = c.getColumnIndex("date");
         int timeIndex = c.getColumnIndex("time");
@@ -41,13 +50,13 @@ public class DBHelper {
         return statsList;
     }
 
-    public void saveStats(String date, String time, String distance, String speed) {
+    public synchronized void saveStats(String date, String time, String distance, String speed) {
         createTable();
         sqLiteDatabase.execSQL("INSERT INTO stats (date, time, distance, speed) VALUES (?, ?, ?, ?)",
                 new String[] {date, time, distance, speed});
     }
 
-    public void deleteStats(String date) {
+    public synchronized void deleteStats(String date) {
         createTable();
         String time = "";
         Cursor cursor = sqLiteDatabase.rawQuery("SELECT time FROM stats WHERE date = ?",
