@@ -41,6 +41,7 @@ public class DuringRunActivity extends AppCompatActivity{
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private static final DecimalFormat format = new DecimalFormat("0.00");
     long startTime = 0;
+    int totalHours = 0;
     int totalMinutes = 0;
     int totalSeconds = 0;
 
@@ -55,9 +56,10 @@ public class DuringRunActivity extends AppCompatActivity{
             long millis = System.currentTimeMillis() - startTime;
             totalSeconds = (int) (millis / 1000);
             totalMinutes = totalSeconds / 60;
+            totalHours = totalMinutes / 60;
             totalSeconds = totalSeconds % 60;
 
-            timer.setText(String.format("%02d:%02d", totalMinutes, totalSeconds));
+            timer.setText(String.format("%02d:%02d:%02d", totalHours, totalMinutes, totalSeconds));
 
             //Calculate distance traveled since last update
             int permission = ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION);
@@ -173,17 +175,15 @@ public class DuringRunActivity extends AppCompatActivity{
         DBHelper dbHelper = new DBHelper(sqLiteDatabase);
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
         String date = dateFormat.format(new Date());
-        dbHelper.saveStats(date, String.format("%02d:%02d", totalMinutes, totalSeconds),
+        dbHelper.saveStats(date, String.format("%02d:%02d:%02d", totalHours, totalMinutes, totalSeconds),
                 format.format(distance), format.format(pace));
 
         // move to end run activity
         Intent intent = new Intent(this, RunCompleteActivity.class);
-        intent.putExtra("time", String.format("%02d:%02d", totalMinutes, totalSeconds));
+        intent.putExtra("time", String.format("%02d:%02d:%02d", totalHours, totalMinutes, totalSeconds));
         intent.putExtra("distance", "" + format.format(distance));
         intent.putExtra("pace", "" + format.format(pace));
         startActivity(intent);
     }
-
-
 
 }
