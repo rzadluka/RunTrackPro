@@ -2,28 +2,36 @@ package com.cs407.runtrackpro;
 
 import static android.content.ContentValues.TAG;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.maps.DirectionsApi;
 import com.google.maps.DirectionsApiRequest;
 import com.google.maps.GeoApiContext;
@@ -32,12 +40,16 @@ import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.LatLng;
 import com.google.maps.model.TravelMode;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MapTrackActivity extends AppCompatActivity {
 
     private GoogleMap mMap;
+    LocationManager locationManager;
+    LocationListener locationListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +62,31 @@ public class MapTrackActivity extends AppCompatActivity {
             mMap = googleMap;
         });
         String API_KEY = "AIzaSyBwGEk3QqFSCRWgm063zpbmFhEWzEx-I7Q";
-        Context appContext = this.getApplicationContext();
-        //Places.initialize(appContext, API_KEY);
-        //PlacesClient placesClient = Places.createClient(appContext);
         GeoApiContext context = new GeoApiContext.Builder()
                 .apiKey(API_KEY)
                 .build();
+
+        locationManager =(LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationListener =new LocationListener() {
+            @Override
+            public void onLocationChanged(@NonNull Location location) {
+                updateLocationInfo(location);
+            }
+        };
+
+        if(Build.VERSION.SDK_INT <23){
+            startListening();
+        }else{
+            if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},1);
+            }else{
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);
+                Location location =locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                if(location !=null && mMap !=null){
+                    updateLocationInfo(location);
+                }
+            }
+        }
 
         Button BackButton = findViewById(R.id.BackButton);
         Intent intent = getIntent();
@@ -63,7 +94,7 @@ public class MapTrackActivity extends AppCompatActivity {
         String endLoc = intent.getStringExtra("end");
         String plan =intent.getStringExtra("plan");
         if(plan.equals("d")){
-            ReBuildMap(startLoc, endLoc, context);
+            ReBuildPath(startLoc, endLoc, context);
         }
         if(plan.equals("m")) {
 
@@ -81,7 +112,41 @@ public class MapTrackActivity extends AppCompatActivity {
         });
     }
 
-    private void ReBuildMap(String start, String end, GeoApiContext context) {
+    public void startListening(){
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            locationManager =(LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requesCode, @NonNull String[] permissions,@NonNull int[] grantResults){
+        super.onRequestPermissionsResult(requesCode, permissions,grantResults);
+
+        if(grantResults.length >0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            startListening();
+        }
+
+    }
+
+    Marker previousMarker;
+    public void updateLocationInfo(Location location){
+        // Remove previous marker if it exists
+        if (previousMarker != null) {
+            previousMarker.remove();
+        }
+         double latitude = location.getLatitude();
+         double longitude = location.getLongitude();
+         com.google.android.gms.maps.model.LatLng gms_latLng =new com.google.android.gms.maps.model.LatLng(latitude,longitude);
+         // Create a new marker at the updated location
+         MarkerOptions markerOptions = new MarkerOptions().position(gms_latLng).title("CurrentLocation");
+         previousMarker = mMap.addMarker(markerOptions);
+
+         // Move the camera to the new location
+         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(gms_latLng, 16));
+
+    }
+
+    private void ReBuildPath(String start, String end, GeoApiContext context) {
         DirectionsApiRequest directions = DirectionsApi.newRequest(context)
                 .origin(start)
                 .destination(end)
