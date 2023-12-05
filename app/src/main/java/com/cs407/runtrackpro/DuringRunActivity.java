@@ -43,8 +43,6 @@ public class DuringRunActivity extends AppCompatActivity {
     double plan_distance = 0;
     double distance = 0;
     double pace = 0;
-    boolean wasResumed = false;
-    boolean wasEnded = false;
     Location lastKnownLocation = null;
     Handler timerHandler = new Handler();
     private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -60,40 +58,35 @@ public class DuringRunActivity extends AppCompatActivity {
             timer.setText(String.format("%02d:%02d:%02d", totalHours, totalMinutes, totalSeconds));
 
             //Calculate distance traveled since last update
-            updateLocation();
+            int permission = ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION);
+            if (permission == PackageManager.PERMISSION_DENIED) {
+                ActivityCompat.requestPermissions(getParent(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_ACCESS_FINE_LOCATION);
+            } else {
+                mFusedLocationProviderClient.getLastLocation().addOnCompleteListener(DuringRunActivity.this, task -> {
+                    Location currentLocation = task.getResult();
+                    // location logging
+//                    Log.d("Location", "Location: " + currentLocation.getLatitude() + ", " + currentLocation.getLongitude());
+                    if (totalMinutes == 0 && totalSeconds == 0) {
+                        lastKnownLocation = task.getResult();
+                        distanceCovered.setText("0.00 mi");
+                        avgSpeed.setText("0.00 mph");
+                    } else if (totalSeconds % 15 == 0 && task.isSuccessful() && currentLocation != null && lastKnownLocation != null) {
+                        double distanceTraveled = lastKnownLocation.distanceTo(currentLocation);
+                        //meters to miles
+                        distanceTraveled = distanceTraveled / 1609.34;
+                        distance += distanceTraveled;
+                        distanceCovered.setText(format.format(distance) + " mi");
+                        double speed = distance / ((totalMinutes * 60 + totalSeconds) / 3600.0);
+                        avgSpeed.setText(format.format(speed) + " mph");
+                        lastKnownLocation = currentLocation;
+                    }
+                });
+            }
 
             timerHandler.postDelayed(this, 500);
         }
     };
 
-    public void updateLocation() {
-        int permission = ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION);
-        if (permission == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions(getParent(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_ACCESS_FINE_LOCATION);
-        } else {
-            mFusedLocationProviderClient.getLastLocation().addOnCompleteListener(DuringRunActivity.this, task -> {
-                Location currentLocation = task.getResult();
-                // location logging
-//                    Log.d("Location", "Location: " + currentLocation.getLatitude() + ", " + currentLocation.getLongitude());
-                if (totalMinutes == 0 && totalSeconds == 0) {
-                    lastKnownLocation = task.getResult();
-                    distanceCovered.setText("0.00 mi");
-                    avgSpeed.setText("0.00 mph");
-                } else if ((wasResumed || wasEnded || totalSeconds % 15 == 0) && task.isSuccessful() && currentLocation != null && lastKnownLocation != null) {
-                    double distanceTraveled = lastKnownLocation.distanceTo(currentLocation);
-                    //meters to miles
-                    distanceTraveled = distanceTraveled / 1609.34;
-                    distance += distanceTraveled;
-                    distanceCovered.setText(format.format(distance) + " mi");
-                    double speed = distance / ((totalMinutes * 60 + totalSeconds) / 3600.0);
-                    avgSpeed.setText(format.format(speed) + " mph");
-                    lastKnownLocation = currentLocation;
-                    wasResumed = false;
-                    wasEnded = false;
-                }
-            });
-        }
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,8 +120,6 @@ public class DuringRunActivity extends AppCompatActivity {
         endRunButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                wasEnded = true;
-                updateLocation();
                 moveToEndRun();
             }
         });
@@ -170,12 +161,7 @@ public class DuringRunActivity extends AppCompatActivity {
             }
         });
     }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        wasResumed = true;
-        updateLocation();
-    }
+
     public void moveToEndRun() {
         // save data and run information
         SQLiteDatabase sqLiteDatabase = getApplicationContext().openOrCreateDatabase("stats",
