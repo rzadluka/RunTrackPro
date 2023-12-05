@@ -3,6 +3,7 @@ package com.cs407.runtrackpro;
 import static android.content.ContentValues.TAG;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -26,12 +27,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.maps.DirectionsApi;
 import com.google.maps.DirectionsApiRequest;
 import com.google.maps.GeoApiContext;
@@ -50,17 +55,19 @@ public class MapTrackActivity extends AppCompatActivity {
     private GoogleMap mMap;
     LocationManager locationManager;
     LocationListener locationListener;
+    private FusedLocationProviderClient mFusedLocationProviderClient;
+    private static final int PERMISSION_REQUEST_ACCESS_FINE_LOCATION = 12;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_track);
 
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         //Rebuild the map under same condition.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.framgent_map);
-        mapFragment.getMapAsync(googleMap -> {
-            mMap = googleMap;
-        });
+        getInitLocation();
+
         String API_KEY = "AIzaSyBwGEk3QqFSCRWgm063zpbmFhEWzEx-I7Q";
         GeoApiContext context = new GeoApiContext.Builder()
                 .apiKey(API_KEY)
@@ -131,6 +138,35 @@ public class MapTrackActivity extends AppCompatActivity {
     }
 
     Marker previousMarker;
+    public void getInitLocation(){
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_ACCESS_FINE_LOCATION);
+            return;
+        }
+        Task<Location> task = mFusedLocationProviderClient.getLastLocation();
+        task.addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.framgent_map);
+                    mapFragment.getMapAsync(googleMap -> {
+                        mMap = googleMap;
+                        double latitude = location.getLatitude();
+                        double longitude = location.getLongitude();
+                        com.google.android.gms.maps.model.LatLng gms_latLng =new com.google.android.gms.maps.model.LatLng(latitude,longitude);
+                        // Create a new marker at the updated location
+                        MarkerOptions markerOptions = new MarkerOptions().position(gms_latLng).title("CurrentLocation");
+                        previousMarker = mMap.addMarker(markerOptions);
+
+                        // Move the camera to the new location
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gms_latLng, 16));
+                    });
+
+                }
+            }
+        });
+    }
+
     public void updateLocationInfo(Location location){
         // Remove previous marker if it exists
         if (previousMarker != null) {
@@ -144,7 +180,7 @@ public class MapTrackActivity extends AppCompatActivity {
          previousMarker = mMap.addMarker(markerOptions);
 
          // Move the camera to the new location
-         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(gms_latLng, 16));
+         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gms_latLng, 16));
 
     }
 
