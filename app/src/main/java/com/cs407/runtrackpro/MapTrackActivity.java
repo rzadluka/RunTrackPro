@@ -5,6 +5,9 @@ import static android.content.ContentValues.TAG;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -12,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -47,8 +51,8 @@ public class MapTrackActivity extends AppCompatActivity {
         });
         String API_KEY = "AIzaSyBwGEk3QqFSCRWgm063zpbmFhEWzEx-I7Q";
         Context appContext = this.getApplicationContext();
-        Places.initialize(appContext, API_KEY);
-        PlacesClient placesClient = Places.createClient(appContext);
+        //Places.initialize(appContext, API_KEY);
+        //PlacesClient placesClient = Places.createClient(appContext);
         GeoApiContext context = new GeoApiContext.Builder()
                 .apiKey(API_KEY)
                 .build();
@@ -57,7 +61,16 @@ public class MapTrackActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String startLoc = intent.getStringExtra("start");
         String endLoc = intent.getStringExtra("end");
-        ReBuildMap(startLoc, endLoc, context);
+        String plan =intent.getStringExtra("plan");
+        if(plan.equals("d")){
+            ReBuildMap(startLoc, endLoc, context);
+        }
+        if(plan.equals("m")) {
+
+        }
+        else{
+            //make a toast.
+        }
         //
 
         BackButton.setOnClickListener(new View.OnClickListener() {
@@ -82,7 +95,7 @@ public class MapTrackActivity extends AppCompatActivity {
                     LatLng endLatLng = new LatLng(result.routes[0].legs[0].endLocation.lat,
                             result.routes[0].legs[0].endLocation.lng);
                     //
-                    adjustCamera(startLatLng, endLatLng);
+                    addPin(startLatLng, endLatLng);
                     drawRoute(result.routes[0].overviewPolyline.decodePath());
                     //
                 }
@@ -96,7 +109,7 @@ public class MapTrackActivity extends AppCompatActivity {
     }
 
     //Zoom the camera to adjust the view (small bug)
-    private void adjustCamera(LatLng startLoc, LatLng endLoc) {
+    private void addPin(LatLng startLoc, LatLng endLoc) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
@@ -117,7 +130,7 @@ public class MapTrackActivity extends AppCompatActivity {
                     mMap.addMarker(new MarkerOptions().position(gmsStartLocation).title("Start Location"));
                     mMap.addMarker(new MarkerOptions().position(gmsEndLocation).title("End Location"));
 
-                    mMap.animateCamera(com.google.android.gms.maps.CameraUpdateFactory.newLatLngBounds(bounds, 100));
+                    //mMap.animateCamera(com.google.android.gms.maps.CameraUpdateFactory.newLatLngBounds(bounds, 100));
                 }
             }
         });

@@ -156,6 +156,7 @@ public class DuringRunActivity extends AppCompatActivity {
                 Intent intent = new Intent(DuringRunActivity.this, MapTrackActivity.class);
                 intent.putExtra("start", startLoc);
                 intent.putExtra("end", endLoc);
+                intent.putExtra("plan",plan);
                 startActivity(intent);
             }
         });
