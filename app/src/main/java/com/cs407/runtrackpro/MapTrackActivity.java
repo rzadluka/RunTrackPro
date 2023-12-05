@@ -70,7 +70,9 @@ public class MapTrackActivity extends AppCompatActivity {
         locationListener =new LocationListener() {
             @Override
             public void onLocationChanged(@NonNull Location location) {
-                updateLocationInfo(location);
+                if(mMap !=null){
+                    updateLocationInfo(location);
+                }
             }
         };
 
