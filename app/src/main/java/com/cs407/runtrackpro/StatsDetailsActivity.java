@@ -1,6 +1,5 @@
 package com.cs407.runtrackpro;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -35,9 +34,9 @@ public class StatsDetailsActivity extends AppCompatActivity {
             Stats stats = HomeFragment.stats1.get(statId);
             statsDetails.setText("Your run on " + stats.getDate());
             date = stats.getDate();
-            distance.setText(formatDistance(Double.parseDouble(stats.getDistance())));
-            time.setText(formatTime(getTimeInSeconds(stats)));
-            pace.setText(formatPace(getPace(stats)));
+            distance.setText(stats.getFormattedDistance());
+            time.setText(stats.getFormattedTime());
+            pace.setText(stats.getPace());
         }
 
         Button back = findViewById(R.id.goBack);
@@ -66,52 +65,5 @@ public class StatsDetailsActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    @SuppressLint("DefaultLocale")
-    private String formatTime(int totalTimeSeconds) {
-        int hours = totalTimeSeconds / 3600;
-        int minutes = (totalTimeSeconds % 3600) / 60;
-        return String.format("%dh %02dm", hours, minutes);
-    }
-
-    @SuppressLint("DefaultLocale")
-    private String formatDistance(double totalDistance) {
-        return String.format("%.2f", totalDistance) + " mi";
-    }
-
-    @SuppressLint("DefaultLocale")
-    private String formatPace(double totalPace) {
-        int hours = (int) (totalPace / 3600);
-        int minutes = (int) ((totalPace % 3600) / 60);
-        int seconds = (int) (totalPace % 60);
-        if (hours >= 1) {
-            return hours + ":" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds) + " /mi";
-        }
-        return minutes + ":" + String.format("%02d", seconds) + " /mi";
-    }
-
-    private double getPace(Stats stats) {
-        int totalTimeSeconds = 0;
-        double distance = Double.parseDouble(stats.getDistance());
-
-        // Split the time string into minutes and seconds
-        String[] timeParts = stats.getTime().split(":");
-        int hours = Integer.parseInt(timeParts[0]);
-        int minutes = Integer.parseInt(timeParts[1]);
-        int seconds = Integer.parseInt(timeParts[2]);
-
-        // Convert time to seconds and add to totalTimeSeconds
-        totalTimeSeconds += hours * 3600 + minutes * 60 + seconds;
-
-        return distance > 0 ? (totalTimeSeconds / distance) : 0;
-    }
-
-    private int getTimeInSeconds(Stats stats) {
-        String[] timeParts = stats.getTime().split(":");
-        int hours = Integer.parseInt(timeParts[0]);
-        int minutes = Integer.parseInt(timeParts[1]);
-        int seconds = Integer.parseInt(timeParts[2]);
-        return hours * 3600 + minutes * 60 + seconds;
     }
 }
