@@ -171,12 +171,14 @@ public class DuringRunActivity extends AppCompatActivity {
         String date = dateFormat.format(new Date());
         dbHelper.saveStats(date, String.format("%02d:%02d:%02d", totalHours, totalMinutes, totalSeconds),
                 format.format(distance), format.format(pace));
+        // debug data
+//        dbHelper.saveStats(date, String.format("%02d:%02d:%02d", 2, 36, 5),
+//                format.format(3.0), format.format(4.0));
 
         // move to end run activity
         Intent intent = new Intent(this, RunCompleteActivity.class);
         intent.putExtra("time", String.format("%02d:%02d:%02d", totalHours, totalMinutes, totalSeconds));
         intent.putExtra("distance", format.format(distance));
-        intent.putExtra("pace", format.format(pace));
         startActivity(intent);
     }
 

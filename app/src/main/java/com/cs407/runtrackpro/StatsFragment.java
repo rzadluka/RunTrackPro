@@ -179,9 +179,10 @@ public class StatsFragment extends Fragment {
 
     @SuppressLint("DefaultLocale")
     private String formatPace(double totalPace) {
-        int minutes = (int) totalPace / 60;
-        int seconds = (int) totalPace % 60;
-        return minutes + ":" + String.format("%02d", seconds) + " /mi";
+        Log.d("StatsFragment", "formatPace: " + totalPace);
+        int hours = (int) (totalPace / 3600);
+        int minutes = (int) ((totalPace % 3600) / 60);
+        return hours + ":" + String.format("%02d", minutes) + " /mi";
     }
 
     public static String convertDateToDescription(String dateString) {
@@ -230,24 +231,22 @@ public class StatsFragment extends Fragment {
         double size = HomeFragment.stats1.size();
         for (int i = 0; i < size; i++) {
             String[] dateParts = HomeFragment.stats1.get(i).getDate().split(" ")[0].split("/");
-            if (dateParts.length == 3) {
-                int month = Integer.parseInt(dateParts[0]);
+            int month = Integer.parseInt(dateParts[0]);
 
-                String[] timeParts = HomeFragment.stats1.get(i).getTime().split(":");
-                int hours = Integer.parseInt(timeParts[0]);
-                int minutes = Integer.parseInt(timeParts[1]);
-                int seconds = Integer.parseInt(timeParts[2]);
+            String[] timeParts = HomeFragment.stats1.get(i).getTime().split(":");
+            int hours = Integer.parseInt(timeParts[0]);
+            int minutes = Integer.parseInt(timeParts[1]);
+            int seconds = Integer.parseInt(timeParts[2]);
 
-                // Add to the total time for the corresponding month
-                if (!monthlyTotal.containsKey(month)) {
-                    monthlyTotal.put(month, new Integer[]{hours, minutes, seconds});
-                } else {
-                    Integer[] existingTime = monthlyTotal.get(month);
-                    existingTime[0] += hours;
-                    existingTime[1] += minutes;
-                    existingTime[2] += seconds;
-                    monthlyTotal.put(month, existingTime);
-                }
+            // Add to the total time for the corresponding month
+            if (!monthlyTotal.containsKey(month)) {
+                monthlyTotal.put(month, new Integer[]{hours, minutes, seconds});
+            } else {
+                Integer[] existingTime = monthlyTotal.get(month);
+                existingTime[0] += hours;
+                existingTime[1] += minutes;
+                existingTime[2] += seconds;
+                monthlyTotal.put(month, existingTime);
             }
         }
 
@@ -269,13 +268,12 @@ public class StatsFragment extends Fragment {
 
         // Split the time string into minutes and seconds
         String[] timeParts = stats.getTime().split(":");
-        if (timeParts.length == 2) {
-            int minutes = Integer.parseInt(timeParts[0]);
-            int seconds = Integer.parseInt(timeParts[1]);
+        int hours = Integer.parseInt(timeParts[0]);
+        int minutes = Integer.parseInt(timeParts[1]);
+        int seconds = Integer.parseInt(timeParts[2]);
 
-            // Convert time to seconds and add to totalTimeSeconds
-            totalTimeSeconds += minutes * 60 + seconds;
-        }
+        // Convert time to seconds and add to totalTimeSeconds
+        totalTimeSeconds += hours * 3600 + minutes * 60 + seconds;
 
         return distance > 0 ? (totalTimeSeconds / distance) : 0;
     }
