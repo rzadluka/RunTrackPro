@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -48,9 +49,10 @@ public class HomeFragment extends Fragment {
         SQLiteDatabase sqLiteDatabase = getContext().openOrCreateDatabase("stats",
                 Context.MODE_PRIVATE, null);
         DBHelper dbHelper = new DBHelper(sqLiteDatabase);
-        
+
         stats1 = dbHelper.readStats();
         if (stats1.isEmpty()) {
+
         }else {
             for (Stats stats : stats1) {
                 displayStats.add(

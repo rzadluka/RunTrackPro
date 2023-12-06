@@ -13,10 +13,13 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -94,28 +97,31 @@ public class DuringRunActivity extends AppCompatActivity {
         timer = (TextView) findViewById(R.id.timer);
         distanceCovered = (TextView) findViewById(R.id.distance);
         avgSpeed = (TextView) findViewById(R.id.speed);
-        Button endRunButton = findViewById(R.id.endRun);
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
-        Button controlTimer = findViewById(R.id.timerControl);
-        controlTimer.setText("Start");
+        ImageView controlTimer = findViewById(R.id.timerControl);
+        controlTimer.setTag("Start");
 
         controlTimer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Button controlTimer = (Button) v;
-                if (controlTimer.getText().equals("Start")) {
+                if (controlTimer.getTag().toString().equals("Start")) {
                     startTime = System.currentTimeMillis() - (long) ((totalMinutes * 60L + totalSeconds) * 1000);
                     timerHandler.postDelayed(timerRunnable, 0);
-                    controlTimer.setText("Pause");
+                    controlTimer.setTag("Pause");
+                    controlTimer.setImageDrawable(getDrawable(R.drawable.ic_pause));
+                    controlTimer.getDrawable().setTint(getColor(R.color.yellow));
                 } else {
                     timerHandler.removeCallbacks(timerRunnable);
-                    controlTimer.setText("Start");
+                    controlTimer.setTag("Start");
+                    controlTimer.setImageDrawable(getDrawable(R.drawable.ic_start));
+                    controlTimer.getDrawable().setTint(getColor(R.color.green));
                 }
             }
         });
 
+        ImageView endRunButton = findViewById(R.id.endRun);
         endRunButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,7 +130,7 @@ public class DuringRunActivity extends AppCompatActivity {
         });
 
         //Change into map view
-        Button MapButton = findViewById(R.id.mapButton);
+        ImageView MapButton = findViewById(R.id.mapButton);
         Intent intent = getIntent();
         String startLoc = intent.getStringExtra("start");
         String endLoc = intent.getStringExtra("end");

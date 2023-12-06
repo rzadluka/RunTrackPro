@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/primary"
     tools:context=".DuringRunActivity">
 
     <LinearLayout
@@ -16,19 +17,23 @@
             android:id="@+id/timer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_margin="15dp"
             android:autoSizeTextType="uniform"
             android:text="00:00:00"
-            android:textSize="50dp" />
+            android:textColor="@color/accent_medium"
+            android:textStyle="bold"
+            android:textSize="60dp" />
 
         <TextView
             android:id="@+id/distance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="5dp"
             android:autoSizeTextType="uniform"
             android:text="0.00 mi"
-            android:textSize="20dp" />
+            android:textColor="@color/accent_medium"
+            android:textStyle="bold"
+            android:textSize="25dp" />
 
         <TextView
             android:id="@+id/speed"
@@ -37,34 +42,45 @@
             android:layout_margin="10dp"
             android:autoSizeTextType="uniform"
             android:text="0.00 mph"
-            android:textSize="20dp" />
+            android:textColor="@color/accent_medium"
+            android:textStyle="bold"
+            android:textSize="25dp" />
 
-        <Button
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="60dp" />
+
+        <ImageView
             android:id="@+id/timerControl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:autoSizeTextType="uniform"
-            android:text="Start" />
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_start"
+            app:tint="@color/green"
+            android:layout_gravity="center_horizontal"
+            android:tag="Start"/>
 
-        <Button
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
+        <ImageView
             android:id="@+id/endRun"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:autoSizeTextType="uniform"
-            android:text="End" />
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_stop"
+            app:tint="@color/red"
+            android:layout_gravity="center_horizontal" />
     </LinearLayout>
 
-    <Button
+    <ImageView
         android:id="@+id/mapButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="301dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_map"
+        app:tint="@color/secondary"
+        android:layout_marginStart="320dp"
         android:layout_marginTop="665dp"
-        android:layout_marginEnd="22dp"
         android:layout_marginBottom="18dp"
-        android:text="Map"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
