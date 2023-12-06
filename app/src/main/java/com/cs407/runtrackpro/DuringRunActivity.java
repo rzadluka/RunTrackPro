@@ -42,7 +42,6 @@ public class DuringRunActivity extends AppCompatActivity {
     int totalSeconds = 0;
     double plan_distance = 0;
     double distance = 0;
-    double pace = 0;
     Location lastKnownLocation = null;
     Handler timerHandler = new Handler();
     private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -170,10 +169,10 @@ public class DuringRunActivity extends AppCompatActivity {
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
         String date = dateFormat.format(new Date());
         dbHelper.saveStats(date, String.format("%02d:%02d:%02d", totalHours, totalMinutes, totalSeconds),
-                format.format(distance), format.format(pace));
+                format.format(distance), format.format(666));
         // debug data
 //        dbHelper.saveStats(date, String.format("%02d:%02d:%02d", 2, 36, 5),
-//                format.format(3.0), format.format(4.0));
+//                format.format(2.0), format.format(4.0));
 
         // move to end run activity
         Intent intent = new Intent(this, RunCompleteActivity.class);

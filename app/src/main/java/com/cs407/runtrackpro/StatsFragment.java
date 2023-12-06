@@ -182,7 +182,11 @@ public class StatsFragment extends Fragment {
         Log.d("StatsFragment", "formatPace: " + totalPace);
         int hours = (int) (totalPace / 3600);
         int minutes = (int) ((totalPace % 3600) / 60);
-        return hours + ":" + String.format("%02d", minutes) + " /mi";
+        int seconds = (int) (totalPace % 60);
+        if (hours >= 1) {
+            return hours + ":" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds) + " /mi";
+        }
+        return minutes + ":" + String.format("%02d", seconds) + " /mi";
     }
 
     public static String convertDateToDescription(String dateString) {
