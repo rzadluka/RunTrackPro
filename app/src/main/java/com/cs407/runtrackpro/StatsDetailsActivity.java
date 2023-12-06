@@ -16,7 +16,7 @@ public class StatsDetailsActivity extends AppCompatActivity {
     TextView statsDetails;
     TextView distance;
     TextView time;
-    TextView speed;
+    TextView pace;
     String date;
 
     @Override
@@ -27,16 +27,16 @@ public class StatsDetailsActivity extends AppCompatActivity {
         statsDetails = findViewById(R.id.statsDetails);
         distance = findViewById(R.id.distance);
         time = findViewById(R.id.time);
-        speed = findViewById(R.id.speed);
+        pace = findViewById(R.id.pace);
         int statId = getIntent().getIntExtra("statId", -1);
 
         if (statId != -1) {
             Stats stats = HomeFragment.stats1.get(statId);
             statsDetails.setText("Your run on " + stats.getDate());
             date = stats.getDate();
-            distance.setText(stats.getDistance());
-            time.setText(stats.getTime());
-            speed.setText(stats.getSpeed());
+            distance.setText(stats.getFormattedDistance());
+            time.setText(stats.getFormattedTime());
+            pace.setText(stats.getPace());
         }
 
         Button back = findViewById(R.id.goBack);

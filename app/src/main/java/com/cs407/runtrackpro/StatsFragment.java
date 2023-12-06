@@ -94,7 +94,7 @@ public class StatsFragment extends Fragment {
             // Populate previous run stats
             previousRunDistance.setText(formatDistance(Double.parseDouble(stats.getDistance())));
             previousRunTime.setText(formatTime(getTimeInSeconds(stats)));
-            previousRunPace.setText(formatPace(getPace(stats)));
+            previousRunPace.setText(stats.getPace());
         } else {
             // Fail-safe in case there are no runs. Should never get here.
             Log.d("StatsFragment", "No runs found");
@@ -179,7 +179,6 @@ public class StatsFragment extends Fragment {
 
     @SuppressLint("DefaultLocale")
     private String formatPace(double totalPace) {
-        Log.d("StatsFragment", "formatPace: " + totalPace);
         int hours = (int) (totalPace / 3600);
         int minutes = (int) ((totalPace % 3600) / 60);
         int seconds = (int) (totalPace % 60);
@@ -265,22 +264,6 @@ public class StatsFragment extends Fragment {
         return values;
     }
 
-
-    private double getPace(Stats stats) {
-        int totalTimeSeconds = 0;
-        double distance = Double.parseDouble(stats.getDistance());
-
-        // Split the time string into minutes and seconds
-        String[] timeParts = stats.getTime().split(":");
-        int hours = Integer.parseInt(timeParts[0]);
-        int minutes = Integer.parseInt(timeParts[1]);
-        int seconds = Integer.parseInt(timeParts[2]);
-
-        // Convert time to seconds and add to totalTimeSeconds
-        totalTimeSeconds += hours * 3600 + minutes * 60 + seconds;
-
-        return distance > 0 ? (totalTimeSeconds / distance) : 0;
-    }
 
     private int getTimeInSeconds(Stats stats) {
         String[] timeParts = stats.getTime().split(":");

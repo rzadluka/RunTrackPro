@@ -37,7 +37,7 @@
                 android:id="@+id/distanceTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Distance (mi)" />
+                android:text="Distance" />
 
             <TextView
                 android:id="@+id/distance"
@@ -76,13 +76,13 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/speedTitle"
+                android:id="@+id/paceTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Speed" />
+                android:text="Pace" />
 
             <TextView
-                android:id="@+id/speed"
+                android:id="@+id/pace"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="loading..."
