@@ -179,7 +179,6 @@ public class StatsFragment extends Fragment {
 
     @SuppressLint("DefaultLocale")
     private String formatPace(double totalPace) {
-        Log.d("StatsFragment", "formatPace: " + totalPace);
         int hours = (int) (totalPace / 3600);
         int minutes = (int) ((totalPace % 3600) / 60);
         int seconds = (int) (totalPace % 60);

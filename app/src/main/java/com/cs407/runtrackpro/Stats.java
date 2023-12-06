@@ -4,13 +4,11 @@ public class Stats {
     private final String date;
     private final String time;
     private final String distance;
-    private final String speed;
 
-    public Stats(String date, String time, String distance, String speed) {
+    public Stats(String date, String time, String distance) {
         this.date = date;
         this.time = time;
         this.distance = distance;
-        this.speed = speed;
     }
 
     public String getDate() {
@@ -25,7 +23,4 @@ public class Stats {
         return distance;
     }
 
-    public String getSpeed() {
-        return speed;
-    }
 }

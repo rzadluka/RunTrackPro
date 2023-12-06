@@ -14,7 +14,7 @@ public class DBHelper {
 
     public static void createTable() {
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS stats " +
-                "(id INTEGER PRIMARY KEY, statId INTEGER, date TEXT, time TEXT, distance TEXT, speed TEXT)");
+                "(id INTEGER PRIMARY KEY, statId INTEGER, date TEXT, time TEXT, distance TEXT)");
     }
 
     public ArrayList<Stats> readStats() {
@@ -23,16 +23,14 @@ public class DBHelper {
         int dateIndex = c.getColumnIndex("date");
         int timeIndex = c.getColumnIndex("time");
         int distanceIndex = c.getColumnIndex("distance");
-        int speedIndex = c.getColumnIndex("speed");
         c.moveToFirst();
         ArrayList<Stats> statsList = new ArrayList<>();
         while (!c.isAfterLast()) {
             String date = c.getString(dateIndex);
             String time = c.getString(timeIndex);
             String distance = c.getString(distanceIndex);
-            String speed = c.getString(speedIndex);
 
-            Stats stats = new Stats(date, time, distance, speed);
+            Stats stats = new Stats(date, time, distance);
             statsList.add(stats);
             c.moveToNext();
         }
@@ -41,10 +39,10 @@ public class DBHelper {
         return statsList;
     }
 
-    public void saveStats(String date, String time, String distance, String speed) {
+    public void saveStats(String date, String time, String distance) {
         createTable();
-        sqLiteDatabase.execSQL("INSERT INTO stats (date, time, distance, speed) VALUES (?, ?, ?, ?)",
-                new String[]{date, time, distance, speed});
+        sqLiteDatabase.execSQL("INSERT INTO stats (date, time, distance) VALUES (?, ?, ?)",
+                new String[]{date, time, distance});
     }
 
     public void deleteStats(String date) {
