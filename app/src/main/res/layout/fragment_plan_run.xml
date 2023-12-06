@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/primary"
     tools:context=".PlanRunFragment">
 
     <TextView
@@ -11,6 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
+        android:textColor="@color/accent_medium"
+        android:textStyle="bold"
         android:text="Plan run by: "
         android:textSize="20dp" />
 
@@ -19,28 +23,68 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Button
+        <LinearLayout
             android:id="@+id/Miles"
-            android:layout_width="180dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="Miles" />
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:paddingVertical="3dp"
+            android:layout_gravity="bottom"
+            android:gravity="center_horizontal"
+            android:background="@drawable/rounded_background"
+            android:orientation="vertical" >
 
-        <Button
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:textColor="@color/primary"
+                android:text="Miles" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_miles"
+                app:tint="@color/primary"
+                android:layout_gravity="center_horizontal" />
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/Destination"
-            android:layout_width="180dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="Destination" />
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:paddingVertical="3dp"
+            android:layout_gravity="bottom"
+            android:gravity="center_horizontal"
+            android:background="@drawable/rounded_background"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:textColor="@color/primary"
+                android:text="Destination" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_destination"
+                app:tint="@color/primary"
+                android:layout_gravity="center_horizontal" />
+        </LinearLayout>
 
     </LinearLayout>
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentRunContainerView"
-        android:layout_width="386dp"
-        android:layout_height="534dp"
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
         android:layout_margin="15dp"
-        android:background="#ECECEC"
+        android:background="@color/accent_light"
         android:padding="15dp" />
 
 </LinearLayout>

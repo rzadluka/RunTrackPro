@@ -12,8 +12,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:text="No stats to display\n Start your first run to see stats here!"
-        android:visibility="invisible"
-        android:textSize="30sp" />
+        android:textSize="20dp" />
 
     <ListView
         android:id="@+id/listView"

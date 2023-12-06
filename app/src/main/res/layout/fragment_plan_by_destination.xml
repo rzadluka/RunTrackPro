@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,6 +16,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
+            android:textColor="@color/accent_medium"
+            android:textColorHint="@color/accent_medium"
             android:hint="Start" />
 
         <EditText
@@ -22,25 +25,67 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
+            android:textColor="@color/accent_medium"
+            android:textColorHint="@color/accent_medium"
             android:hint="Destination" />
 
-        <Button
+        <LinearLayout
             android:id="@+id/RouteButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Generate Route" />
+            android:layout_margin="5dp"
+            android:paddingVertical="3dp"
+            android:layout_gravity="bottom"
+            android:gravity="center_horizontal"
+            android:background="@drawable/rounded_background"
+            android:orientation="vertical" >
 
-        <Button
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:textColor="@color/primary"
+                android:text="Generate Route" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_route"
+                app:tint="@color/primary"
+                android:layout_gravity="center_horizontal" />
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/StartRun_Destination"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Start Run" />
+            android:layout_margin="5dp"
+            android:paddingVertical="3dp"
+            android:layout_gravity="bottom"
+            android:gravity="center_horizontal"
+            android:background="@drawable/rounded_background"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:textColor="@color/primary"
+                android:text="Start Run" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_start"
+                app:tint="@color/primary"
+                android:layout_gravity="center_horizontal" />
+        </LinearLayout>
 
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/framgent_map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
-            android:layout_height="350dp" />
+            android:layout_height="300dp" />
 
     </LinearLayout>
 

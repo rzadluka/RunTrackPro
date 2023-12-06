@@ -3,6 +3,7 @@ package com.cs407.runtrackpro;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -15,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        Button HomeFragmentButton = findViewById(R.id.home_button);
+        LinearLayout HomeFragmentButton = findViewById(R.id.home_button);
         HomeFragmentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -27,35 +28,31 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button RunFragmentButton = findViewById(R.id.plan_button);
+        LinearLayout RunFragmentButton = findViewById(R.id.plan_button);
         RunFragmentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragmentMainContainerView, PlanRunFragment.class, null)
                         .setReorderingAllowed(true)
-                        .addToBackStack("Showing Fragment1")
+                        .addToBackStack("Showing Plan a Run")
                         .commit();
 
             }
         });
 
-        Button StatsFragmentButton = findViewById(R.id.stat_button);
+        LinearLayout StatsFragmentButton = findViewById(R.id.stat_button);
         StatsFragmentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragmentMainContainerView, StatsFragment.class, null)
                         .setReorderingAllowed(true)
-                        .addToBackStack("Showing Fragment1")
+                        .addToBackStack("Showing Stats")
                         .commit();
 
             }
         });
-
-    }
-
-    public void EnabledMilesButtonByDefault() {
 
     }
 }

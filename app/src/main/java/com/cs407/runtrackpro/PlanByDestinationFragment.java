@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -144,7 +145,7 @@ public class PlanByDestinationFragment extends Fragment {
         });
 
         //Route generate button and function.
-        Button generateRoute = (Button) view.findViewById(R.id.RouteButton);
+        LinearLayout generateRoute = (LinearLayout) view.findViewById(R.id.RouteButton);
         generateRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,7 +159,7 @@ public class PlanByDestinationFragment extends Fragment {
             }
         });
 
-        Button startRun = (Button) view.findViewById(R.id.StartRun_Destination);
+        LinearLayout startRun = (LinearLayout) view.findViewById(R.id.StartRun_Destination);
         startRun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

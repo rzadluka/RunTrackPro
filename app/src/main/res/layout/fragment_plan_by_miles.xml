@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,19 +15,41 @@
             android:id="@+id/milesInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/accent_medium"
+            android:textColorHint="@color/accent_medium"
             android:hint="Enter miles: " />
 
-        <Button
+        <LinearLayout
             android:id="@+id/startbutton_miles"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Start" />
+            android:layout_margin="5dp"
+            android:paddingVertical="3dp"
+            android:layout_gravity="bottom"
+            android:gravity="center_horizontal"
+            android:background="@drawable/rounded_background"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:textColor="@color/primary"
+                android:text="Start" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_start"
+                app:tint="@color/primary"
+                android:layout_gravity="center_horizontal" />
+        </LinearLayout>
 
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/framgent_map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
-            android:layout_height="350dp" />
+            android:layout_height="300dp" />
 
     </LinearLayout>
 

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/primary"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -31,29 +32,86 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <Button
+            <LinearLayout
                 android:id="@+id/home_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
                 android:layout_weight="1"
-                android:text="Home" />
+                android:layout_margin="5dp"
+                android:paddingVertical="3dp"
+                android:layout_gravity="bottom"
+                android:gravity="center_horizontal"
+                android:background="@drawable/rounded_background"
+                android:orientation="vertical" >
 
-            <Button
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18dp"
+                    android:textColor="@color/primary"
+                    android:text="Home" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_home"
+                    app:tint="@color/primary"
+                    android:layout_gravity="center_horizontal" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/plan_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
                 android:layout_weight="1"
-                android:text="Plan a Run" />
+                android:layout_margin="5dp"
+                android:paddingVertical="3dp"
+                android:layout_gravity="bottom"
+                android:gravity="center_horizontal"
+                android:background="@drawable/rounded_background"
+                android:orientation="vertical" >
 
-            <Button
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18dp"
+                    android:textColor="@color/primary"
+                    android:text="Plan a Run" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_plan_run"
+                    app:tint="@color/primary"
+                    android:layout_gravity="center_horizontal" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/stat_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
                 android:layout_weight="1"
-                android:text="Stats" />
+                android:layout_margin="5dp"
+                android:paddingVertical="3dp"
+                android:layout_gravity="bottom"
+                android:gravity="center_horizontal"
+                android:background="@drawable/rounded_background"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18dp"
+                    android:textColor="@color/primary"
+                    android:text="Stats" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_stats"
+                    app:tint="@color/primary"
+                    android:layout_gravity="center_horizontal" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
