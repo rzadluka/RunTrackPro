@@ -32,7 +32,7 @@
             android:paddingVertical="3dp"
             android:layout_gravity="bottom"
             android:gravity="center_horizontal"
-            android:background="@drawable/rounded_background"
+            android:background="@drawable/rounded_background_dark"
             android:orientation="vertical" >
 
             <TextView

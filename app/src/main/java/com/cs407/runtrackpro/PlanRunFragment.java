@@ -62,9 +62,13 @@ public class PlanRunFragment extends Fragment {
                 .commit();
 
         milesButton = view.findViewById(R.id.Miles);
+        destinationButton = view.findViewById(R.id.Destination);
+
         milesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                milesButton.setBackgroundResource(R.drawable.rounded_background_dark);
+                destinationButton.setBackgroundResource(R.drawable.rounded_background);
                 //Show map API and input miles.
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragmentRunContainerView, PlanByMilesFragment.class, null)
@@ -74,10 +78,12 @@ public class PlanRunFragment extends Fragment {
             }
         });
 
-        destinationButton = view.findViewById(R.id.Destination);
         destinationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                milesButton.setBackgroundResource(R.drawable.rounded_background);
+                destinationButton.setBackgroundResource(R.drawable.rounded_background_dark);
+
                 //Show map API and start location and end location.
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragmentRunContainerView, PlanByDestinationFragment.class, null)

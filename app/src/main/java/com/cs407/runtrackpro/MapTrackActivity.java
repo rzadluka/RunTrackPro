@@ -20,6 +20,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -97,7 +98,7 @@ public class MapTrackActivity extends AppCompatActivity {
             }
         }
 
-        Button BackButton = findViewById(R.id.BackButton);
+        LinearLayout BackButton = findViewById(R.id.BackButton);
         Intent intent = getIntent();
         String startLoc = intent.getStringExtra("start");
         String endLoc = intent.getStringExtra("end");

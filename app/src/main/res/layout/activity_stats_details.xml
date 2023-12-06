@@ -4,16 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/primary"
     tools:context=".StatsDetailsActivity">
 
     <TextView
         android:id="@+id/statsDetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="50dp"
         android:gravity="center"
         android:text="Your run on [loading...]"
         android:textSize="20dp"
+        android:textColor="@color/accent_medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -29,20 +31,24 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_margin="15dp"
             android:gravity="center"
+            android:background="@drawable/rounded_background_light"
+            android:padding="10dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/distanceTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/accent_medium"
                 android:text="Distance (mi)" />
 
             <TextView
                 android:id="@+id/distance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/accent_medium"
                 android:text="loading..."
                 android:textSize="20dp" />
         </LinearLayout>
@@ -50,20 +56,24 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_margin="15dp"
             android:gravity="center"
+            android:background="@drawable/rounded_background_light"
+            android:padding="10dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/timeTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/accent_medium"
                 android:text="Duration" />
 
             <TextView
                 android:id="@+id/time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/accent_medium"
                 android:text="loading..."
                 android:textSize="20dp" />
         </LinearLayout>
@@ -71,20 +81,24 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_margin="15dp"
             android:gravity="center"
+            android:background="@drawable/rounded_background_light"
+            android:padding="10dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/speedTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/accent_medium"
                 android:text="Speed" />
 
             <TextView
                 android:id="@+id/speed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/accent_medium"
                 android:text="loading..."
                 android:textSize="20dp" />
         </LinearLayout>
@@ -94,35 +108,67 @@
         android:id="@+id/linearLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="650dp"
-        android:gravity="center"
+        android:layout_marginBottom="16dp"
         android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent">
 
-        <Button
+        <LinearLayout
             android:id="@+id/goBack"
-            android:layout_width="wrap_content"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:layout_marginRight="60dp"
-            android:text="BACK"
+            android:background="@drawable/rounded_background"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingVertical="3dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent">
 
-        <Button
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Back"
+                android:textColor="@color/primary"
+                android:textSize="18dp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_back"
+                app:tint="@color/primary" />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="80dp"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
             android:id="@+id/delete"
-            android:layout_width="wrap_content"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="60dp"
-            android:onClick="deleteButtonFunction"
-            android:text="DELETE"
+            android:background="@drawable/rounded_background"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingVertical="3dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete"
+                android:textColor="@color/primary"
+                android:textSize="18dp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_delete"
+                app:tint="@color/primary" />
+        </LinearLayout>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

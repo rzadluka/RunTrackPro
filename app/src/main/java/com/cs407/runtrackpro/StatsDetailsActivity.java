@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,7 +40,7 @@ public class StatsDetailsActivity extends AppCompatActivity {
             speed.setText(stats.getSpeed());
         }
 
-        Button back = findViewById(R.id.goBack);
+        LinearLayout back = findViewById(R.id.goBack);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -48,7 +49,7 @@ public class StatsDetailsActivity extends AppCompatActivity {
             }
         });
 
-        Button delete = findViewById(R.id.delete);
+        LinearLayout delete = findViewById(R.id.delete);
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
