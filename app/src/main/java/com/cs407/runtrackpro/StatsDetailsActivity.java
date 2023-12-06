@@ -49,7 +49,7 @@ public class StatsDetailsActivity extends AppCompatActivity {
             }
         });
 
-        Button delete = findViewById(R.id.delete);
+        LinearLayout delete = findViewById(R.id.delete);
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
