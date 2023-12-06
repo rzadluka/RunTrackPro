@@ -12,14 +12,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -161,7 +158,7 @@ public class DuringRunActivity extends AppCompatActivity {
                 Intent intent = new Intent(DuringRunActivity.this, MapTrackActivity.class);
                 intent.putExtra("start", startLoc);
                 intent.putExtra("end", endLoc);
-                intent.putExtra("plan",plan);
+                intent.putExtra("plan", plan);
                 startActivity(intent);
             }
         });
@@ -174,11 +171,11 @@ public class DuringRunActivity extends AppCompatActivity {
         DBHelper dbHelper = new DBHelper(sqLiteDatabase);
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
         String date = dateFormat.format(new Date());
-//        dbHelper.saveStats(date, String.format("%02d:%02d:%02d", totalHours, totalMinutes, totalSeconds),
-//                format.format(distance));
+        dbHelper.saveStats(date, String.format("%02d:%02d:%02d", totalHours, totalMinutes, totalSeconds),
+                format.format(distance));
         // debug data
-        dbHelper.saveStats(date, String.format("%02d:%02d:%02d", 2, 36, 5),
-                format.format(2.0));
+//        dbHelper.saveStats(date, String.format("%02d:%02d:%02d", 2, 36, 5),
+//                format.format(2.0));
 
         // move to end run activity
         Intent intent = new Intent(this, RunCompleteActivity.class);

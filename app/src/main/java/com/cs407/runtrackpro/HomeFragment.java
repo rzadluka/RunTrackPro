@@ -11,7 +11,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
@@ -45,6 +44,12 @@ public class HomeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         SQLiteDatabase sqLiteDatabase = getContext().openOrCreateDatabase("stats",
                 Context.MODE_PRIVATE, null);
@@ -52,23 +57,18 @@ public class HomeFragment extends Fragment {
 
         stats1 = dbHelper.readStats();
         if (stats1.isEmpty()) {
-
-        }else {
+            LinearLayout linearLayout = view.findViewById(R.id.noStatsText);
+            linearLayout.setVisibility(View.VISIBLE);
+        } else {
             for (Stats stats : stats1) {
                 displayStats.add(
                         String.format("Date: %s%nTime: %s%nDistance: %s%n",
-                        stats.getDate(),
-                        stats.getTime(),
-                        stats.getDistance()
-                ));
+                                stats.getDate(),
+                                stats.getTime(),
+                                stats.getDistance()
+                        ));
             }
         }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         ListView listView = view.findViewById(R.id.listView);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getContext(),
@@ -84,8 +84,6 @@ public class HomeFragment extends Fragment {
                 startActivity(intent);
             }
         });
-
-
 
         return view;
     }
