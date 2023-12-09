@@ -14,6 +14,7 @@ public class RunCompleteActivity extends AppCompatActivity {
     LinearLayout homeButton;
     TextView timeText;
     TextView distanceText;
+    TextView paceText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,8 +23,16 @@ public class RunCompleteActivity extends AppCompatActivity {
 
         timeText = findViewById(R.id.time);
         distanceText = findViewById(R.id.distance);
-        timeText.append(getIntent().getExtras().getString("time"));
-        distanceText.append(getIntent().getExtras().getString("distance"));
+        paceText = findViewById(R.id.avgPace);
+
+        String time = getIntent().getExtras().getString("time");
+        String distance = getIntent().getExtras().getString("distance");
+        String pace = getIntent().getExtras().getString("pace");
+
+        timeText.append(time);
+        distanceText.append(distance + " mi");
+        paceText.append(pace);
+
 
         homeButton = findViewById(R.id.home_button);
         homeButton.setOnClickListener(new View.OnClickListener() {

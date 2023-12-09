@@ -5,9 +5,12 @@ import static android.content.ContentValues.TAG;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -33,6 +36,8 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -58,6 +63,9 @@ public class MapTrackActivity extends AppCompatActivity {
     LocationListener locationListener;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private static final int PERMISSION_REQUEST_ACCESS_FINE_LOCATION = 12;
+    private static final int ZOOM_LEVEL = 18;
+    private static final int PATH_WIDTH = 20;
+    private ArrayList<LatLng> userPath;
 
 
     @Override
@@ -74,25 +82,28 @@ public class MapTrackActivity extends AppCompatActivity {
                 .apiKey(API_KEY)
                 .build();
 
-        locationManager =(LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        locationListener =new LocationListener() {
+        // initialize user path
+        userPath = new ArrayList<>();
+
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(@NonNull Location location) {
-                if(mMap !=null){
+                if(mMap != null){
                     updateLocationInfo(location);
                 }
             }
         };
 
-        if(Build.VERSION.SDK_INT <23){
+        if(Build.VERSION.SDK_INT < 23){
             startListening();
         }else{
             if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
                 ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},1);
-            }else{
+            } else{
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);
-                Location location =locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                if(location !=null && mMap !=null){
+                Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                if(location != null && mMap != null){
                     updateLocationInfo(location);
                 }
             }
@@ -102,7 +113,7 @@ public class MapTrackActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String startLoc = intent.getStringExtra("start");
         String endLoc = intent.getStringExtra("end");
-        String plan =intent.getStringExtra("plan");
+        String plan = intent.getStringExtra("plan");
         if(plan.equals("d")){
             ReBuildPath(startLoc, endLoc, context);
         }
@@ -124,7 +135,7 @@ public class MapTrackActivity extends AppCompatActivity {
 
     public void startListening(){
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-            locationManager =(LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+            locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         }
     }
 
@@ -154,19 +165,22 @@ public class MapTrackActivity extends AppCompatActivity {
                         mMap = googleMap;
                         double latitude = location.getLatitude();
                         double longitude = location.getLongitude();
-                        com.google.android.gms.maps.model.LatLng gms_latLng =new com.google.android.gms.maps.model.LatLng(latitude,longitude);
+                        com.google.android.gms.maps.model.LatLng gms_latLng = new com.google.android.gms.maps.model.LatLng(latitude,longitude);
                         // Create a new marker at the updated location
-                        MarkerOptions markerOptions = new MarkerOptions().position(gms_latLng).title("CurrentLocation");
+                        MarkerOptions markerOptions = new MarkerOptions()
+                                .position(gms_latLng)
+                                .title("Current Location")
+                                .icon(BitmapFromVector(getApplicationContext(), R.drawable.ic_map_marker));
                         previousMarker = mMap.addMarker(markerOptions);
 
                         // Move the camera to the new location
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gms_latLng, 16));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gms_latLng, ZOOM_LEVEL));
                     });
-
                 }
             }
         });
     }
+
 
     public void updateLocationInfo(Location location){
         // Remove previous marker if it exists
@@ -175,13 +189,20 @@ public class MapTrackActivity extends AppCompatActivity {
         }
          double latitude = location.getLatitude();
          double longitude = location.getLongitude();
-         com.google.android.gms.maps.model.LatLng gms_latLng =new com.google.android.gms.maps.model.LatLng(latitude,longitude);
+         com.google.android.gms.maps.model.LatLng gms_latLng = new com.google.android.gms.maps.model.LatLng(latitude, longitude);
          // Create a new marker at the updated location
-         MarkerOptions markerOptions = new MarkerOptions().position(gms_latLng).title("CurrentLocation");
+         MarkerOptions markerOptions = new MarkerOptions()
+                 .position(gms_latLng)
+                 .title("CurrentLocation")
+                 .icon(BitmapFromVector(getApplicationContext(), R.drawable.ic_map_marker));
          previousMarker = mMap.addMarker(markerOptions);
 
+         // add point to user path
+        userPath.add(new LatLng(latitude, longitude));
+        drawUserPath(userPath);
+
          // Move the camera to the new location
-         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gms_latLng, 16));
+         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gms_latLng, ZOOM_LEVEL));
 
     }
 
@@ -198,10 +219,9 @@ public class MapTrackActivity extends AppCompatActivity {
                             result.routes[0].legs[0].startLocation.lng);
                     LatLng endLatLng = new LatLng(result.routes[0].legs[0].endLocation.lat,
                             result.routes[0].legs[0].endLocation.lng);
-                    //
+
                     addPin(startLatLng, endLatLng);
                     drawRoute(result.routes[0].overviewPolyline.decodePath());
-                    //
                 }
             }
 
@@ -231,10 +251,14 @@ public class MapTrackActivity extends AppCompatActivity {
                     builder.include(gmsEndLocation);
                     com.google.android.gms.maps.model.LatLngBounds bounds = builder.build();
 
-                    mMap.addMarker(new MarkerOptions().position(gmsStartLocation).title("Start Location"));
-                    mMap.addMarker(new MarkerOptions().position(gmsEndLocation).title("End Location"));
-
-                    //mMap.animateCamera(com.google.android.gms.maps.CameraUpdateFactory.newLatLngBounds(bounds, 100));
+                    mMap.addMarker(new MarkerOptions()
+                            .position(gmsStartLocation)
+                            .title("Start Location")
+                            .icon(BitmapFromVector(getApplicationContext(), R.drawable.ic_start_map)));
+                    mMap.addMarker(new MarkerOptions()
+                            .position(gmsEndLocation)
+                            .title("End Location")
+                            .icon(BitmapFromVector(getApplicationContext(), R.drawable.ic_finish)));
                 }
             }
         });
@@ -251,10 +275,47 @@ public class MapTrackActivity extends AppCompatActivity {
                 }
                 PolylineOptions polylineOptions = new PolylineOptions()
                         .addAll(gmsPath)
-                        .width(10)
-                        .color(Color.BLUE);
+                        .width(PATH_WIDTH)
+                        .color(R.color.primary);
                 mMap.addPolyline(polylineOptions);
             }
         });
+    }
+
+    private void drawUserPath(List<LatLng> path) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                List<com.google.android.gms.maps.model.LatLng> gmsPath = new ArrayList<>();
+                for (com.google.maps.model.LatLng latLng : path) {
+                    gmsPath.add(new com.google.android.gms.maps.model.LatLng(latLng.lat, latLng.lng));
+                }
+                PolylineOptions polylineOptions = new PolylineOptions()
+                        .addAll(gmsPath)
+                        .width(PATH_WIDTH)
+                        .color(R.color.black);
+                mMap.addPolyline(polylineOptions);
+            }
+        });
+    }
+
+    // code from: https://www.geeksforgeeks.org/how-to-add-custom-marker-to-google-maps-in-android/
+    private BitmapDescriptor BitmapFromVector(Context context, int vectorResId) {
+        Drawable vectorDrawable = ContextCompat.getDrawable(
+                context, vectorResId);
+
+        vectorDrawable.setBounds(
+                0, 0, vectorDrawable.getIntrinsicWidth(),
+                vectorDrawable.getIntrinsicHeight());
+
+        Bitmap bitmap = Bitmap.createBitmap(
+                vectorDrawable.getIntrinsicWidth(),
+                vectorDrawable.getIntrinsicHeight(),
+                Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.draw(canvas);
+
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 }
