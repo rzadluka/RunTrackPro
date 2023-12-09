@@ -73,7 +73,7 @@ public class DuringRunActivity extends AppCompatActivity {
                         distanceCovered.setText("0.00 mi");
                         avgSpeed.setText("0.00 mph");
                         pace.setText("--:-- /mi");
-                    } else if (totalSeconds % 15 == 0 && task.isSuccessful() && currentLocation != null && lastKnownLocation != null) {
+                    } else if (totalSeconds % 8 == 0 && task.isSuccessful() && currentLocation != null && lastKnownLocation != null) {
                         // distance
                         double distanceTraveled = lastKnownLocation.distanceTo(currentLocation);
                         distanceTraveled = distanceTraveled / 1609.34; //meters to miles
