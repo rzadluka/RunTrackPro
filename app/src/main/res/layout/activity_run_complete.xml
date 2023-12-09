@@ -13,16 +13,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="30dp"
+        android:layout_marginTop="20dp"
         android:text="Great Job!!"
         android:textColor="@color/accent_medium"
         android:textStyle="bold"
         android:textSize="50dp" />
 
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/framgent_map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_margin="25dp"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:layout_margin="5dp"
         android:orientation="horizontal" >
 
         <ImageView
@@ -48,6 +56,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:layout_margin="5dp"
         android:orientation="horizontal" >
 
         <ImageView
@@ -73,12 +82,39 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:layout_margin="5dp"
         android:orientation="horizontal" >
 
         <ImageView
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:src="@drawable/ic_speed"
+            app:tint="@color/accent_medium"
+            android:layout_marginEnd="10dp"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:id="@+id/speed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@color/accent_medium"
+            android:text="Speed: "
+            android:textSize="25dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_margin="5dp"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/ic_pace"
             app:tint="@color/accent_medium"
             android:layout_marginEnd="10dp"
             android:layout_gravity="center_horizontal" />
@@ -94,15 +130,12 @@
 
     </LinearLayout>
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="350dp" />
-
     <LinearLayout
         android:id="@+id/home_button"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:paddingVertical="3dp"
+        android:layout_margin="20dp"
         android:layout_gravity="center"
         android:gravity="center_horizontal"
         android:background="@drawable/rounded_background_dark"

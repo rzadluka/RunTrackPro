@@ -67,7 +67,6 @@ public class MapTrackActivity extends AppCompatActivity {
     private static final int PATH_WIDTH = 20;
     private ArrayList<LatLng> userPath;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

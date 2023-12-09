@@ -20,10 +20,12 @@ import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.maps.model.LatLng;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Scanner;
@@ -36,6 +38,7 @@ public class DuringRunActivity extends AppCompatActivity {
     TextView timer;
     TextView distanceCovered;
     TextView avgSpeed;
+    TextView pace;
     long startTime = 0;
     int totalHours = 0;
     int totalMinutes = 0;
@@ -69,15 +72,26 @@ public class DuringRunActivity extends AppCompatActivity {
                         lastKnownLocation = task.getResult();
                         distanceCovered.setText("0.00 mi");
                         avgSpeed.setText("0.00 mph");
+                        pace.setText("--:-- /mi");
                     } else if (totalSeconds % 15 == 0 && task.isSuccessful() && currentLocation != null && lastKnownLocation != null) {
+                        // distance
                         double distanceTraveled = lastKnownLocation.distanceTo(currentLocation);
-                        //meters to miles
-                        distanceTraveled = distanceTraveled / 1609.34;
+                        distanceTraveled = distanceTraveled / 1609.34; //meters to miles
                         distance += distanceTraveled;
                         distanceCovered.setText(format.format(distance) + " mi");
+
+                        // speed
                         double speed = distance / ((totalMinutes * 60 + totalSeconds) / 3600.0);
                         avgSpeed.setText(format.format(speed) + " mph");
                         lastKnownLocation = currentLocation;
+
+                        // pace
+                        double totalTimeMinutes = (totalHours * 60) + totalMinutes + (totalSeconds / 60);
+                        double pacePerMile = totalTimeMinutes / distance;
+                        int minutesPerMile = (int) pacePerMile;
+                        int secondsPerMile = (int) ((pacePerMile - minutesPerMile) * 60);
+                        String formattedPace = String.format("%02d:%02d /mi", minutesPerMile, secondsPerMile);
+                        pace.setText(formattedPace);
                     }
                 });
             }
@@ -91,9 +105,10 @@ public class DuringRunActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_during_run);
 
-        timer = (TextView) findViewById(R.id.timer);
-        distanceCovered = (TextView) findViewById(R.id.distance);
-        avgSpeed = (TextView) findViewById(R.id.speed);
+        timer = findViewById(R.id.timer);
+        distanceCovered = findViewById(R.id.distance);
+        avgSpeed = findViewById(R.id.speed);
+        pace = findViewById(R.id.pace);
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -178,7 +193,8 @@ public class DuringRunActivity extends AppCompatActivity {
         Intent intent = new Intent(this, RunCompleteActivity.class);
         intent.putExtra("time", String.format("%02d:%02d:%02d", totalHours, totalMinutes, totalSeconds));
         intent.putExtra("distance", format.format(distance));
-        intent.putExtra("pace", avgSpeed.getText());
+        intent.putExtra("speed", avgSpeed.getText().toString());
+        intent.putExtra("pace", pace.getText().toString());
         startActivity(intent);
     }
 

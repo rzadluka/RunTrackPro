@@ -39,9 +39,20 @@
             android:id="@+id/speed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="5dp"
             android:autoSizeTextType="uniform"
             android:text="0.00 mph"
+            android:textColor="@color/accent_medium"
+            android:textStyle="bold"
+            android:textSize="25dp" />
+
+        <TextView
+            android:id="@+id/pace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:autoSizeTextType="uniform"
+            android:text="0:00 /mi"
             android:textColor="@color/accent_medium"
             android:textStyle="bold"
             android:textSize="25dp" />
