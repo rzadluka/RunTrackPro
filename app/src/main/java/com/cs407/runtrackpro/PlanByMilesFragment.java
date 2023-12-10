@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -57,11 +58,13 @@ public class PlanByMilesFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String input = miles.getText().toString();
-                if (input != null) {
+                if (input != null && input.matches("[1-9]\\d*")) {
                     Intent intent = new Intent(getActivity(), DuringRunActivity.class);
                     intent.putExtra("distance", input);
                     intent.putExtra("plan", "m");
                     startActivity(intent);
+                } else {
+                    Toast.makeText(getContext(), "Please enter a valid number", Toast.LENGTH_LONG).show();
                 }
             }
         });

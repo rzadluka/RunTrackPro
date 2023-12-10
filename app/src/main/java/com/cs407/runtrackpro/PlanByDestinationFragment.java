@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -151,10 +152,10 @@ public class PlanByDestinationFragment extends Fragment {
             public void onClick(View v) {
                 String startLoc = startText.getText().toString();
                 String endLoc = endText.getText().toString();
-                if (startLoc != null && endLoc != null) {
+                if (!startLoc.isEmpty() && !endLoc.isEmpty()) {
                     showResult(startLoc, endLoc, context);
                 } else {
-                    //make a toast.
+                    Toast.makeText(getContext(), "Please enter a start and end location", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -165,10 +166,10 @@ public class PlanByDestinationFragment extends Fragment {
             public void onClick(View v) {
                 String startLoc = startText.getText().toString();
                 String endLoc = endText.getText().toString();
-                if (startLoc != null && endLoc != null) {
+                if (!startLoc.isEmpty() && !endLoc.isEmpty()) {
                     DistanceCal(startLoc, endLoc);
                 } else {
-                    //make a toast.
+                    Toast.makeText(getContext(), "Please enter a start and end location", Toast.LENGTH_LONG).show();
                 }
             }
         });
