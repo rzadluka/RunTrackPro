@@ -185,7 +185,7 @@ public class StatsFragment extends Fragment {
         if (hours >= 1) {
             return hours + ":" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds) + " /mi";
         }
-        return minutes + ":" + String.format("%02d", seconds) + " /mi";
+        return minutes + seconds > 0 ? minutes + ":" + String.format("%02d", seconds) + " /mi" : "--:-- /mi";
     }
 
     public static String convertDateToDescription(String dateString) {

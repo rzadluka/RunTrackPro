@@ -86,11 +86,11 @@ public class DuringRunActivity extends AppCompatActivity {
                         lastKnownLocation = currentLocation;
 
                         // pace
-                        double totalTimeMinutes = (totalHours * 60) + totalMinutes + (totalSeconds / 60);
-                        double pacePerMile = totalTimeMinutes / distance;
-                        int minutesPerMile = (int) pacePerMile;
-                        int secondsPerMile = (int) ((pacePerMile - minutesPerMile) * 60);
-                        String formattedPace = String.format("%02d:%02d /mi", minutesPerMile, secondsPerMile);
+                        double totalTimeSeconds = (totalHours * 3600) + (totalMinutes * 60) + totalSeconds;
+                        double pacePerMile = totalTimeSeconds / distance;
+                        int minutesPerMile = (int) ((pacePerMile % 3600) / 60);
+                        int secondsPerMile = (int) (pacePerMile % 60);
+                        String formattedPace = minutesPerMile + secondsPerMile > 0 ? String.format("%02d:%02d /mi", minutesPerMile, secondsPerMile) : "--:-- /mi";
                         pace.setText(formattedPace);
                     }
                 });

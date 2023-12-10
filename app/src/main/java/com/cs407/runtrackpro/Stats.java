@@ -57,7 +57,7 @@ public class Stats {
         if (hours >= 1) {
             return hours + ":" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds) + " /mi";
         }
-        return minutes + ":" + String.format("%02d", seconds) + " /mi";
+        return minutes + seconds > 0 ? minutes + ":" + String.format("%02d", seconds) + " /mi" : "--:-- /mi";
     }
 
     private int getTimeInSeconds(String time) {
