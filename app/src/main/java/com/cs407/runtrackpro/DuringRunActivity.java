@@ -34,7 +34,7 @@ public class DuringRunActivity extends AppCompatActivity {
 
     private static final int PERMISSION_REQUEST_ACCESS_FINE_LOCATION = 12;
     private static final DecimalFormat format = new DecimalFormat("0.00");
-    //code for timer control made referencing from https://stackoverflow.com/questions/4597690/how-to-set-timer-in-android
+    // code for timer control made referencing from https://stackoverflow.com/questions/4597690/how-to-set-timer-in-android
     TextView timer;
     TextView distanceCovered;
     TextView distanceLeft;
