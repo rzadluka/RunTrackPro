@@ -185,7 +185,7 @@ public class StatsFragment extends Fragment {
         if (hours >= 1) {
             return hours + ":" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds) + " /mi";
         }
-        return minutes + seconds > 0 ? minutes + ":" + String.format("%02d", seconds) + " /mi" : "--:-- /mi";
+        return minutes + seconds > 0 ? minutes + ":" + String.format("%02d", seconds) + " /mi" : "00:00 /mi";
     }
 
     public static String convertDateToDescription(String dateString) {
@@ -217,7 +217,9 @@ public class StatsFragment extends Fragment {
             totalTimeSeconds += getTimeInSeconds(HomeFragment.stats1.get(i));
 
             double pace = totalDistance > 0 ? totalTimeSeconds / totalDistance : 0;
-            totalPace += pace;
+            if (pace > 0) {
+                totalPace += pace;
+            }
         }
 
         ArrayList<String> averages = new ArrayList<>();

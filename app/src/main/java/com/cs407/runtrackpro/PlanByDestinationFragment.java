@@ -155,7 +155,7 @@ public class PlanByDestinationFragment extends Fragment {
                 if (!startLoc.isEmpty() && !endLoc.isEmpty()) {
                     showResult(startLoc, endLoc, context);
                 } else {
-                    Toast.makeText(getContext(), "Please enter a start and end location", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Please enter a start and end location", Toast.LENGTH_SHORT).show();
                 }
             }
         });

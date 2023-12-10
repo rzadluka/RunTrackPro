@@ -64,7 +64,7 @@ public class PlanByMilesFragment extends Fragment {
                     intent.putExtra("plan", "m");
                     startActivity(intent);
                 } else {
-                    Toast.makeText(getContext(), "Please enter a valid number", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Please enter a valid number", Toast.LENGTH_SHORT).show();
                 }
             }
         });
