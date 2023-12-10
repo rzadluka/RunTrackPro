@@ -37,6 +37,7 @@ public class DuringRunActivity extends AppCompatActivity {
     //code for timer control made referencing from https://stackoverflow.com/questions/4597690/how-to-set-timer-in-android
     TextView timer;
     TextView distanceCovered;
+    TextView distanceLeft;
     TextView avgSpeed;
     TextView pace;
     long startTime = 0;
@@ -83,6 +84,9 @@ public class DuringRunActivity extends AppCompatActivity {
                         distance += distanceTraveled;
                         distanceCovered.setText(format.format(distance) + " mi");
 
+                        // distance left
+                        distanceLeft.setText(String.format("%.2f mi left", plan_distance - distance));
+
                         // speed
                         double speed = distance / ((totalMinutes * 60 + totalSeconds) / 3600.0);
                         avgSpeed.setText(format.format(speed) + " mph");
@@ -110,6 +114,7 @@ public class DuringRunActivity extends AppCompatActivity {
 
         timer = findViewById(R.id.timer);
         distanceCovered = findViewById(R.id.distance);
+        distanceLeft = findViewById(R.id.distance_left);
         avgSpeed = findViewById(R.id.speed);
         pace = findViewById(R.id.pace);
 
@@ -165,6 +170,7 @@ public class DuringRunActivity extends AppCompatActivity {
         if (plan.equals("m")) {
             double double_distance = Double.parseDouble(RAW_distance);
             plan_distance = double_distance;
+            distanceLeft.setText(String.format("%.2f mi left", plan_distance));
         }
 
         MapButton.setOnClickListener(new View.OnClickListener() {

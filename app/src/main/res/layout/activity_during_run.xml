@@ -28,12 +28,23 @@
             android:id="@+id/distance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_marginTop="5dp"
             android:autoSizeTextType="uniform"
             android:text="0.00 mi"
             android:textColor="@color/accent_medium"
             android:textStyle="bold"
             android:textSize="25dp" />
+
+        <TextView
+            android:id="@+id/distance_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:autoSizeTextType="uniform"
+            android:text="0.00 mi left"
+            android:textColor="@color/secondary"
+            android:textStyle="bold"
+            android:textSize="18dp" />
 
         <TextView
             android:id="@+id/speed"
