@@ -46,6 +46,7 @@ public class DuringRunActivity extends AppCompatActivity {
     double plan_distance = 0;
     double distance = 0;
     Location lastKnownLocation = null;
+    private ArrayList<String> userPath;
     Handler timerHandler = new Handler();
     private FusedLocationProviderClient mFusedLocationProviderClient;
     Runnable timerRunnable = new Runnable() {
@@ -66,14 +67,16 @@ public class DuringRunActivity extends AppCompatActivity {
             } else {
                 mFusedLocationProviderClient.getLastLocation().addOnCompleteListener(DuringRunActivity.this, task -> {
                     Location currentLocation = task.getResult();
-                    // location logging
-//                    Log.d("Location", "Location: " + currentLocation.getLatitude() + ", " + currentLocation.getLongitude());
+
+                    // add point to user path
+                    userPath.add(currentLocation.getLatitude() + "," + currentLocation.getLongitude());
+
                     if (totalMinutes == 0 && totalSeconds == 0) {
                         lastKnownLocation = task.getResult();
                         distanceCovered.setText("0.00 mi");
                         avgSpeed.setText("0.00 mph");
                         pace.setText("--:-- /mi");
-                    } else if (totalSeconds % 8 == 0 && task.isSuccessful() && currentLocation != null && lastKnownLocation != null) {
+                    } else if (totalSeconds % 5 == 0 && task.isSuccessful() && currentLocation != null && lastKnownLocation != null) {
                         // distance
                         double distanceTraveled = lastKnownLocation.distanceTo(currentLocation);
                         distanceTraveled = distanceTraveled / 1609.34; //meters to miles
@@ -111,6 +114,8 @@ public class DuringRunActivity extends AppCompatActivity {
         pace = findViewById(R.id.pace);
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+        userPath = new ArrayList<>();
 
         ImageView controlTimer = findViewById(R.id.timerControl);
         controlTimer.setTag("Start");
@@ -160,13 +165,8 @@ public class DuringRunActivity extends AppCompatActivity {
         if (plan.equals("m")) {
             double double_distance = Double.parseDouble(RAW_distance);
             plan_distance = double_distance;
-        } else {
-            //make a toast.
         }
-        //debug
-        String s = String.valueOf(plan_distance);
-        Log.i(TAG, s);
-        //-----------------------------------------------------------------------
+
         MapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -174,6 +174,7 @@ public class DuringRunActivity extends AppCompatActivity {
                 intent.putExtra("start", startLoc);
                 intent.putExtra("end", endLoc);
                 intent.putExtra("plan", plan);
+                intent.putExtra("path", userPath);
                 startActivity(intent);
             }
         });
@@ -195,6 +196,7 @@ public class DuringRunActivity extends AppCompatActivity {
         intent.putExtra("distance", format.format(distance));
         intent.putExtra("speed", avgSpeed.getText().toString());
         intent.putExtra("pace", pace.getText().toString());
+        intent.putExtra("path", userPath);
         startActivity(intent);
     }
 

@@ -1,26 +1,51 @@
 package com.cs407.runtrackpro;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class RunCompleteActivity extends AppCompatActivity {
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.model.LatLng;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class RunCompleteActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     LinearLayout homeButton;
     TextView timeText;
     TextView distanceText;
     TextView speedText;
     TextView paceText;
+    private GoogleMap mMap;
+    ArrayList<String> userPath;
+    private static final int PATH_WIDTH = 15;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_run_complete);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.framgent_map);
+        mapFragment.getMapAsync(this);
+
+        userPath = getIntent().getExtras().getStringArrayList("path");
 
         timeText = findViewById(R.id.time);
         distanceText = findViewById(R.id.distance);
@@ -37,7 +62,6 @@ public class RunCompleteActivity extends AppCompatActivity {
         speedText.append(speed);
         paceText.append(pace);
 
-
         homeButton = findViewById(R.id.home_button);
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,8 +71,74 @@ public class RunCompleteActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        drawUserPath(userPath);
+
+        ArrayList<LatLng> pathLatLng = convertStringToLatLng(userPath);
+
+        // Move and animate camera to include the polyline in the view
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        for (LatLng point : pathLatLng) {
+            builder.include(new com.google.android.gms.maps.model.LatLng(point.lat, point.lng));
+        }
+
+        // Use ViewTreeObserver to wait for the layout to be measured
+        final SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.framgent_map);
+        if (mapFragment != null && mapFragment.getView() != null) {
+            ViewTreeObserver viewTreeObserver = mapFragment.getView().getViewTreeObserver();
+            if (viewTreeObserver.isAlive()) {
+                viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                            mapFragment.getView().getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                        } else {
+                            mapFragment.getView().getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                        }
+
+                        LatLngBounds bounds = builder.build();
+                        int padding = 100; // Padding in pixels from the edge of the map
+                        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+                        mMap.animateCamera(cu);
+                    }
+                });
+            }
+        }
+    }
+
     private void goToHome() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+    private void drawUserPath(List<String> path) {
+        // convert String ArrayList to LatLng
+        ArrayList<LatLng> pathLatLng = convertStringToLatLng(path);
+
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                List<com.google.android.gms.maps.model.LatLng> gmsPath = new ArrayList<>();
+                for (com.google.maps.model.LatLng latLng : pathLatLng) {
+                    gmsPath.add(new com.google.android.gms.maps.model.LatLng(latLng.lat, latLng.lng));
+                }
+                PolylineOptions polylineOptions = new PolylineOptions()
+                        .addAll(gmsPath)
+                        .width(PATH_WIDTH)
+                        .color(R.color.secondary);
+                mMap.addPolyline(polylineOptions);
+            }
+        });
+    }
+
+    private ArrayList<LatLng> convertStringToLatLng(List<String> path) {
+        ArrayList<LatLng> pathLatLng = new ArrayList<>();
+        for (String point : path) {
+            String[] pointLatLng = point.split(",");
+            pathLatLng.add(new LatLng(Double.parseDouble(pointLatLng[0]), Double.parseDouble(pointLatLng[1])));
+        }
+        return pathLatLng;
     }
 }

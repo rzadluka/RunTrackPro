@@ -65,7 +65,7 @@ public class MapTrackActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_ACCESS_FINE_LOCATION = 12;
     private static final int ZOOM_LEVEL = 18;
     private static final int PATH_WIDTH = 20;
-    private ArrayList<LatLng> userPath;
+    private ArrayList<String> userPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +73,7 @@ public class MapTrackActivity extends AppCompatActivity {
         setContentView(R.layout.activity_map_track);
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
         //Rebuild the map under same condition.
         getInitLocation();
 
@@ -80,9 +81,6 @@ public class MapTrackActivity extends AppCompatActivity {
         GeoApiContext context = new GeoApiContext.Builder()
                 .apiKey(API_KEY)
                 .build();
-
-        // initialize user path
-        userPath = new ArrayList<>();
 
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
@@ -108,6 +106,9 @@ public class MapTrackActivity extends AppCompatActivity {
             }
         }
 
+        // get userPath
+        userPath = getIntent().getExtras().getStringArrayList("path");
+
         LinearLayout BackButton = findViewById(R.id.BackButton);
         Intent intent = getIntent();
         String startLoc = intent.getStringExtra("start");
@@ -116,13 +117,6 @@ public class MapTrackActivity extends AppCompatActivity {
         if(plan.equals("d")){
             ReBuildPath(startLoc, endLoc, context);
         }
-        if(plan.equals("m")) {
-
-        }
-        else{
-            //make a toast.
-        }
-        //
 
         BackButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,13 +190,12 @@ public class MapTrackActivity extends AppCompatActivity {
                  .icon(BitmapFromVector(getApplicationContext(), R.drawable.ic_map_marker));
          previousMarker = mMap.addMarker(markerOptions);
 
-         // add point to user path
-        userPath.add(new LatLng(latitude, longitude));
-        drawUserPath(userPath);
+         // update and draw user's path
+         userPath.add(latitude + "," + longitude);
+         drawUserPath(userPath);
 
          // Move the camera to the new location
          mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gms_latLng, ZOOM_LEVEL));
-
     }
 
     private void ReBuildPath(String start, String end, GeoApiContext context) {
@@ -281,12 +274,19 @@ public class MapTrackActivity extends AppCompatActivity {
         });
     }
 
-    private void drawUserPath(List<LatLng> path) {
+    private void drawUserPath(List<String> path) {
+        // convert String ArrayList to LatLng
+        ArrayList<LatLng> pathLatLng = new ArrayList<>();
+        for (String point : path) {
+            String[] pointLatLng = point.split(",");
+            pathLatLng.add(new LatLng(Double.parseDouble(pointLatLng[0]), Double.parseDouble(pointLatLng[1])));
+        }
+
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
                 List<com.google.android.gms.maps.model.LatLng> gmsPath = new ArrayList<>();
-                for (com.google.maps.model.LatLng latLng : path) {
+                for (com.google.maps.model.LatLng latLng : pathLatLng) {
                     gmsPath.add(new com.google.android.gms.maps.model.LatLng(latLng.lat, latLng.lng));
                 }
                 PolylineOptions polylineOptions = new PolylineOptions()
