@@ -85,7 +85,7 @@ public class DuringRunActivity extends AppCompatActivity {
                         distanceCovered.setText(format.format(distance) + " mi");
 
                         // distance left
-                        distanceLeft.setText(String.format("%.2f mi left", plan_distance - distance));
+                        distanceLeft.setText(plan_distance - distance > 0 ? String.format("%.2f mi left", plan_distance - distance) : "0.00 mi left");
 
                         // speed
                         double speed = distance / ((totalMinutes * 60 + totalSeconds) / 3600.0);
