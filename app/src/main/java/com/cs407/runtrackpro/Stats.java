@@ -2,15 +2,19 @@ package com.cs407.runtrackpro;
 
 import android.annotation.SuppressLint;
 
+import java.util.ArrayList;
+
 public class Stats {
     private final String date;
     private final String time;
     private final String distance;
+    private final String path;
 
-    public Stats(String date, String time, String distance) {
+    public Stats(String date, String time, String distance, String path) {
         this.date = date;
         this.time = time;
         this.distance = distance;
+        this.path = path;
     }
 
     public String getDate() {
@@ -24,6 +28,8 @@ public class Stats {
     public String getDistance() {
         return distance;
     }
+
+    public ArrayList<String> getPath() { return formatPath(path); }
 
     public String getPace() {
         return formatPace(getRawPace());
@@ -59,6 +65,17 @@ public class Stats {
         }
         return minutes + seconds > 0 ? minutes + ":" + String.format("%02d", seconds) + " /mi" : "--:-- /mi";
     }
+
+    @SuppressLint("DefaultLocale")
+    private ArrayList<String> formatPath(String path) {
+        ArrayList<String> pathList = new ArrayList<>();
+        String[] pathArr = path.split(";");
+        for (String point : pathArr) {
+            pathList.add(point);
+        }
+        return  pathList;
+    }
+
 
     private int getTimeInSeconds(String time) {
         String[] timeParts = time.split(":");

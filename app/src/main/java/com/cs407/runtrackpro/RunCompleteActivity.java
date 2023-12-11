@@ -27,14 +27,14 @@ import java.util.List;
 
 public class RunCompleteActivity extends AppCompatActivity implements OnMapReadyCallback {
 
+    private GoogleMap mMap;
+    private static final int PATH_WIDTH = 15;
     LinearLayout homeButton;
     TextView timeText;
     TextView distanceText;
     TextView speedText;
     TextView paceText;
-    private GoogleMap mMap;
     ArrayList<String> userPath;
-    private static final int PATH_WIDTH = 15;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,14 +92,10 @@ public class RunCompleteActivity extends AppCompatActivity implements OnMapReady
                 viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
                     public void onGlobalLayout() {
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-                            mapFragment.getView().getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                        } else {
-                            mapFragment.getView().getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                        }
+                        mapFragment.getView().getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
                         LatLngBounds bounds = builder.build();
-                        int padding = 100; // Padding in pixels from the edge of the map
+                        int padding = 100;
                         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
                         mMap.animateCamera(cu);
                     }

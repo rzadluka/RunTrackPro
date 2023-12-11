@@ -194,7 +194,7 @@ public class DuringRunActivity extends AppCompatActivity {
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
         String date = dateFormat.format(new Date());
         dbHelper.saveStats(date, String.format("%02d:%02d:%02d", totalHours, totalMinutes, totalSeconds),
-                format.format(distance));
+                format.format(distance), formatPath(userPath));
 
         // move to end run activity
         Intent intent = new Intent(this, RunCompleteActivity.class);
@@ -204,6 +204,14 @@ public class DuringRunActivity extends AppCompatActivity {
         intent.putExtra("pace", pace.getText().toString());
         intent.putExtra("path", userPath);
         startActivity(intent);
+    }
+
+    private String formatPath(ArrayList<String> path) {
+        String pathStr = "";
+        for (String point : path) {
+            pathStr += point + ";";
+        }
+        return pathStr.substring(0, pathStr.length());
     }
 
 }
