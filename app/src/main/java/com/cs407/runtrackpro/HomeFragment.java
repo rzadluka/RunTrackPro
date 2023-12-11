@@ -15,6 +15,7 @@ import android.widget.ListView;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HomeFragment extends Fragment {
 
@@ -62,7 +63,7 @@ public class HomeFragment extends Fragment {
         } else {
             for (Stats stats : stats1) {
                 displayStats.add(
-                        String.format("Date: %s%nTime: %s%nDistance: %s%n",
+                        String.format("Date: %s%nTime: %s%nDistance: %s mi",
                                 stats.getDate(),
                                 stats.getTime(),
                                 stats.getDistance()
