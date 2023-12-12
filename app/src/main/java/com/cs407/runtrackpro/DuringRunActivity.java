@@ -69,9 +69,6 @@ public class DuringRunActivity extends AppCompatActivity {
                 mFusedLocationProviderClient.getLastLocation().addOnCompleteListener(DuringRunActivity.this, task -> {
                     Location currentLocation = task.getResult();
 
-                    // add point to user path
-                    userPath.add(currentLocation.getLatitude() + "," + currentLocation.getLongitude());
-
                     if (totalMinutes == 0 && totalSeconds == 0) {
                         lastKnownLocation = task.getResult();
                         distanceCovered.setText("0.00 mi");
@@ -79,6 +76,8 @@ public class DuringRunActivity extends AppCompatActivity {
                         pace.setText("--:-- /mi");
                     } else if (totalSeconds % 5 == 0 && task.isSuccessful() && currentLocation != null && lastKnownLocation != null) {
                         // distance
+                        // add point to user path
+                        userPath.add(currentLocation.getLatitude() + "," + currentLocation.getLongitude());
                         double distanceTraveled = lastKnownLocation.distanceTo(currentLocation);
                         distanceTraveled = distanceTraveled / 1609.34; //meters to miles
                         distance += distanceTraveled;

@@ -223,7 +223,7 @@ public class StatsFragment extends Fragment {
         }
 
         ArrayList<String> averages = new ArrayList<>();
-        averages.add(formatDistance((int) (totalDistance / size)));
+        averages.add(formatDistance(totalDistance / size));
         averages.add(formatTime((int) (totalTimeSeconds / size)));
         averages.add(formatPace((int) (totalPace / size)));
 
